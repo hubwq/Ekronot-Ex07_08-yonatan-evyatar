@@ -1,12 +1,10 @@
 #include "Piece.h"
 
-Piece::Piece(std::string name, int color)
-	: _name(name), _color(color)
-{
-}
+Piece::Piece(const std::string& name, int color) : _name(name), _color(color) {}
 
 Piece::~Piece()
 {
+
 }
 
 std::string Piece::getName() const

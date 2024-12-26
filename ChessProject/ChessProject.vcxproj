@@ -21,10 +21,12 @@
   <ItemGroup>
     <ClInclude Include="Manager.h" />
     <ClInclude Include="Piece.h" />
+    <ClInclude Include="Rook.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Manager.cpp" />
     <ClCompile Include="Piece.cpp" />
+    <ClCompile Include="Rook.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
