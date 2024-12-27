@@ -2,10 +2,7 @@
 
 Piece::Piece(const std::string& name, int color) : _name(name), _color(color) {}
 
-Piece::~Piece()
-{
-
-}
+Piece::~Piece() {}
 
 std::string Piece::getName() const
 {

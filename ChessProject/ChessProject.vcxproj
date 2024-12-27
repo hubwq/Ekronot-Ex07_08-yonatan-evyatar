@@ -19,11 +19,13 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Knight.h" />
     <ClInclude Include="Manager.h" />
     <ClInclude Include="Piece.h" />
     <ClInclude Include="Rook.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Knight.cpp" />
     <ClCompile Include="Manager.cpp" />
     <ClCompile Include="Piece.cpp" />
     <ClCompile Include="Rook.cpp" />
