@@ -1,0 +1,2 @@
+﻿MSVCRTD.lib(exe_main.obj) : error LNK2019: unresolved external symbol main referenced in function "int __cdecl invoke_main(void)" (?invoke_main@@YAHXZ)
+C:\Users\Cyber_User\OneDrive\Magshimim\c++\chess\Ekronot-Ex07_08-yonatan-aviatar\ChessProject\x64\Debug\ChessProject.exe : fatal error LNK1120: 1 unresolved externals

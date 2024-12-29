@@ -1,5 +1,10 @@
 #include "Manager.h"
 #include "Bishop.h"
+#include "Rook.h"
+#include "Knight.h"
+#include "Pawn.h"
+#include "King.h"
+#include "Queen.h"
 #include "BoardSizeExeption.h"
 #include "PieceExeption.h"
 
@@ -16,7 +21,7 @@ Piece* Manager::createPiece(const char piece, const int color)
 	case 'k':
 		return new King(color);
 	case 'q':
-		return new Quene(color);
+		return new Queen(color);
 	case 'p':
 		return new Pawn(color);
 	default:
@@ -40,6 +45,7 @@ Manager::Manager(const std::string& board) : _turn(int(board[64] - '0') ? 1 : 0)
 
 	SetBoard(board);
 }
+
 
 Manager::~Manager()
 {
@@ -74,6 +80,7 @@ std::string Manager::GetBoard() const
 
 	return board;
 }
+
 
 void Manager::SetBoard(const std::string& board)
 {

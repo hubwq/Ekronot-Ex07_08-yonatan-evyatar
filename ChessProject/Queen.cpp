@@ -1,15 +1,15 @@
-#include "Bishop.h"
+#include "Queen.h"
 
-Bishop::Bishop(const int color)
-	: Piece("Bishop", color)
+Queen::Queen(const int color) : Piece("Queen", color)
 {
 }
 
-Bishop::~Bishop()
+Queen::~Queen()
 {
 }
 
-void Bishop::Move(const Manager& board, const std::string& move) const
+
+void Queen::Move(const Manager& board, const std::string& move) const
 {
 	std::string boardstr = board.GetBoard();
 

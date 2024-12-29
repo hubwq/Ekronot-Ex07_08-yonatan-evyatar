@@ -1,15 +1,15 @@
-#include "Bishop.h"
+#include "Pawn.h"
 
-Bishop::Bishop(const int color)
-	: Piece("Bishop", color)
+Pawn::Pawn(const int color) : Piece("Pawn", color)
 {
 }
 
-Bishop::~Bishop()
+Pawn::~Pawn()
 {
 }
 
-void Bishop::Move(const Manager& board, const std::string& move) const
+
+void Pawn::Move(const Manager& board, const std::string& move) const
 {
 	std::string boardstr = board.GetBoard();
 

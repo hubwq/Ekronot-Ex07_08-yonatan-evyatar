@@ -2,10 +2,10 @@
 #include <string>
 #include "Piece.h"
 
-class Knight : public Piece
+class Pawn : public Piece
 {
 public:
-	Knight(const int color);
-	virtual ~Knight();
+	Pawn(const int color);
+	virtual ~Pawn();
 	virtual void Move(const Manager& board, const std::string& move) const override;
 };
