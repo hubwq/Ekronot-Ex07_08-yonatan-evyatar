@@ -1,19 +1,23 @@
 #pragma once
 #include <string>
+#include "Manager.h"
+#include "MoveSizeExeption.h"
+
+class Manager;
 
 class Piece
 {
-protected:
+private:
 	std::string _name;
 	int _color;
 
 public:
-	Piece(const std::string& name, int color);
+	Piece(const std::string name, const int color);
 	virtual ~Piece();
 
 	std::string getName() const;
 	int getColor() const;
 
-	virtual void Move(std::string&) const = 0;
+	virtual void Move(const Manager& board, const std::string& move) const = 0;
 };
 

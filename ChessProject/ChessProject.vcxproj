@@ -19,16 +19,17 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Knight.h" />
+    <ClInclude Include="Bishop.h" />
+    <ClInclude Include="BoardSizeExeption.h" />
     <ClInclude Include="Manager.h" />
+    <ClInclude Include="MoveSizeExeption.h" />
     <ClInclude Include="Piece.h" />
-    <ClInclude Include="Rook.h" />
+    <ClInclude Include="PieceExeption.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Knight.cpp" />
+    <ClCompile Include="Bishop.cpp" />
     <ClCompile Include="Manager.cpp" />
     <ClCompile Include="Piece.cpp" />
-    <ClCompile Include="Rook.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>

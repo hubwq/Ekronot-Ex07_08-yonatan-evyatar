@@ -1,20 +1,23 @@
 #pragma once
 #include <vector>
 #include "Piece.h"
-#include "../Frontend/Pipe.h"
+
+class Piece;
+
 class Manager
 {
 private:
 	std::vector<std::vector<Piece*>> _board;
 	int _turn;
-	Pipe _p;
+
+	Piece* createPiece(const char piece, const int color);
 
 public:
-	Manager();
+	Manager(const std::string& board);
 	~Manager();
-	void connectToFront();
-	std::string getBoard();
+
+	std::string GetBoard() const;
 	
-	void SetBoard();
+	void SetBoard(const std::string& board);
 };
 

@@ -1,85 +1,92 @@
 #include "Manager.h"
-#include <iostream>
-#include <thread>
-#include <chrono>
+#include "Bishop.h"
+#include "BoardSizeExeption.h"
+#include "PieceExeption.h"
 
-using std::cout;
-using std::endl;
-using std::string;
+Piece* Manager::createPiece(const char piece, const int color)
+{
+	switch (tolower(piece))
+	{
+	case 'r':
+		return new Rook(color);
+	case 'n':
+		return new Knight(color);
+	case 'b':
+		return new Bishop(color);
+	case 'k':
+		return new King(color);
+	case 'q':
+		return new Quene(color);
+	case 'p':
+		return new Pawn(color);
+	default:
+		throw PieceExeption();
+	}
+}
 
 /*
- * Manager Constructor.
- * Sets the classic chess starting board
- * and initializes the turn to white.
- */
-Manager::Manager() : _turn(0)
+* Manager Constracor.
+* Set a chess starting board
+* and set who make first move.
+*/
+Manager::Manager(const std::string& board) : _turn(int(board[64] - '0') ? 1 : 0)
 {
+	if (board.length() != 65)
+	{
+		throw BoardSizeExeption();
+	}
+
+	_board.resize(8, std::vector<Piece*>(8, nullptr));
+
+	SetBoard(board);
 }
 
-Manager::~Manager() 
+Manager::~Manager()
 {
+	for (auto& row : _board)
+	{
+		for (Piece* piece : row)
+		{
+			delete piece;
+		}
+	}
 }
 
-void Manager::connectToFront()
+std::string Manager::GetBoard() const
 {
-    srand(static_cast<unsigned int>(time(nullptr)));
+	std::string board = "";
 
-    Pipe p;
-    bool isConnect = p.connect();
+	for (int i = 0; i < 64; i++)
+	{
+		int row = i / 8;
+		int col = i % 8;
 
-    while (!isConnect)
-    {
-        cout << "Cannot connect to graphics." << endl;
-        cout << "Do you want to try connecting again or exit? (0 - try again, 1 - exit): ";
-        string ans;
-        std::cin >> ans;
+		if (_board[row][col] != nullptr)
+		{
+			board += _board[row][col]->getName()[0];
+			board[i] = (_board[row][col]->getColor()) ? tolower(board[i]) : toupper(board[i]);
+		}
+		else
+		{
+			board += '#';
+		}
+	}
 
-        if (ans == "0")
-        {
-            cout << "Attempting to reconnect..." << endl;
-            std::this_thread::sleep_for(std::chrono::seconds(5));
-            isConnect = p.connect();
-        }
-        else
-        {
-            p.close();
-            return;
-        }
-    }
-
-    cout << "Successfully connected to graphics." << endl;
+	return board;
 }
 
-void Manager::SetBoard()
+void Manager::SetBoard(const std::string& board)
 {
-    char msgToGraphics[1024];
+	for (int i = 0; i < 64; i++)
+	{
+		int row = i / 8;
+		int col = i % 8;
+		char piece = board[i];
 
-    // Populate msgToGraphics with the board string according to the protocol.
-    // Example: Setting up a standard chessboard.
-    strcpy_s(msgToGraphics, "rnbkqbnrpppppppp################################PPPPPPPPRNBKQBNR1");
-
-    Pipe p;
-    p.sendMessageToGraphics(msgToGraphics); // Send the board string.
-
-    // Get a message from graphics.
-    string msgFromGraphics = p.getMessageFromGraphics();
-
-    while (msgFromGraphics != "quit")
-    {
-        // Handle the string sent from graphics according to the protocol.
-        // Example input: e2e4 (move piece from e2 to e4).
-        
-        // YOUR CODE: Process the move and update the board state.
-
-        // Placeholder for response to graphics.
-        strcpy_s(msgToGraphics, "1"); // Example response: Success status.
-
-        // Send the result back to graphics.
-        p.sendMessageToGraphics(msgToGraphics);
-
-        // Get the next message from graphics.
-        msgFromGraphics = p.getMessageFromGraphics();
-    }
-
-    p.close();
+		if (piece != '#')
+		{
+			int color = isupper(piece) ? 0 : 1; // Upparcase = white, Lowercase = black
+			_board[row][col] = createPiece(piece, color);
+		}
+	}
 }
