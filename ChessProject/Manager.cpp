@@ -81,6 +81,11 @@ std::string Manager::GetBoard() const
 	return board;
 }
 
+int Manager::GetTurn() const
+{
+	return this->_turn;
+}
+
 
 void Manager::SetBoard(const std::string& board)
 {
