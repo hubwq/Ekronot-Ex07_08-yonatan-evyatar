@@ -19,11 +19,13 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\Frontend\Pipe.h" />
     <ClInclude Include="Bishop.h" />
     <ClInclude Include="BoardSizeExeption.h" />
     <ClInclude Include="King.h" />
     <ClInclude Include="Knight.h" />
     <ClInclude Include="Manager.h" />
+    <ClInclude Include="MoveExeption.h" />
     <ClInclude Include="MoveSizeExeption.h" />
     <ClInclude Include="Pawn.h" />
     <ClInclude Include="Piece.h" />
@@ -32,10 +34,13 @@
     <ClInclude Include="Rook.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\Frontend\Source.cpp" />
     <ClCompile Include="Bishop.cpp" />
     <ClCompile Include="King.cpp" />
     <ClCompile Include="Knight.cpp" />
+    <ClCompile Include="main.cpp" />
     <ClCompile Include="Manager.cpp" />
+    <ClCompile Include="MoveExeption.cpp" />
     <ClCompile Include="Pawn.cpp" />
     <ClCompile Include="Piece.cpp" />
     <ClCompile Include="Queen.cpp" />

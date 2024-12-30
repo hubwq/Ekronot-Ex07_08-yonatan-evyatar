@@ -25,6 +25,6 @@ void Pawn::Move(const Manager& board, const std::string& move) const
 	}
 	else
 	{
-		throw MoveSizeExeption();
+		//throw MoveSizeExeption();
 	}
 }
