@@ -34,7 +34,6 @@
     <ClInclude Include="Rook.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\Frontend\Source.cpp" />
     <ClCompile Include="Bishop.cpp" />
     <ClCompile Include="King.cpp" />
     <ClCompile Include="Knight.cpp" />

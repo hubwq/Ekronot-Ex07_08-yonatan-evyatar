@@ -1,3 +1,6 @@
+#ifndef KING_H
+#define KING_H
+
 #include "King.h"
 
 
@@ -28,3 +31,4 @@ void King::Move(const Manager& board, const std::string& move) const
 		//throw MoveSizeExeption();
 	}
 }
+#endif // KING_H

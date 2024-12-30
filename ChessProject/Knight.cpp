@@ -1,3 +1,6 @@
+#ifndef KNIGHT_H
+#define KNIGHT_H
+
 #include "Knight.h"
 
 
@@ -28,3 +31,4 @@ void Knight::Move(const Manager& board, const std::string& move) const
 		//throw MoveSizeExeption();
 	}
 }
+#endif // KNIGHT_H

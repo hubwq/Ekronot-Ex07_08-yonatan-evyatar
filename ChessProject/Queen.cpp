@@ -1,3 +1,6 @@
+#ifndef QUEEN_H
+#define QUEEN_H
+
 #include "Queen.h"
 
 Queen::Queen(const int color) : Piece("Queen", color)
@@ -28,3 +31,4 @@ void Queen::Move(const Manager& board, const std::string& move) const
 		//throw MoveSizeExeption();
 	}
 }
+#endif // QUEEN_H

@@ -83,9 +83,6 @@
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\Frontend\Source.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="MoveExeption.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>

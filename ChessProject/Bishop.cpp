@@ -1,3 +1,6 @@
+#ifndef BISHOP_H
+#define BISHOP_H
+
 #include "Bishop.h"
 
 Bishop::Bishop(const int color)
@@ -22,3 +25,4 @@ void Bishop::Move(const Manager& board, const std::string& move) const
 		throw error;
 	}
 }
+#endif // BISHOP_H

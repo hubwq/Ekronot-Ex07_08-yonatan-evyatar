@@ -1,17 +1,20 @@
-/*
-This file servers as an example of how to use Pipe.h file.
-It is recommended to use the following code in your project,
-in order to read and write information from and to the Backend
-*/
-
 #include "../Frontend/Pipe.h"
 #include <iostream>
 #include <thread>
+#include "Manager.h"
 
 using std::cout;
 using std::endl;
 using std::string;
 
+
+#define MAX_BOARD_ROWS 8
+#define MAX_BOARD_COLS 8
+#define MIN_BOARD_ROWS 0
+#define MIN_BOARD_COLS 0
+
+
+// connect to pipe
 Pipe connect()
 {
 	srand(time_t(NULL));
@@ -43,19 +46,51 @@ Pipe connect()
 }
 
 
-void drawBoard(Pipe p)
+
+// check if the move is from place and to place inside board bound
+void drawBoard(Pipe& p ,std::string& board)
 {
 	char msgToGraphics[1024];
-	// msgToGraphics should contain the board string accord the protocol
-	// YOUR CODE
 
-	strcpy_s(msgToGraphics, "rnbkqbnrpppppppp################################PPPPPPPPRNBKQBNR1"); // just example...
-	
+
+	strcpy_s(msgToGraphics, board.c_str());
 	p.sendMessageToGraphics(msgToGraphics);   // send the board string
 }
 
 
-void play(Pipe p)
+
+bool isOnBoard(int srcRow, int srcCol, int destRow, int destCol)
+{
+	// Check if source and destination positions are on the board
+	if (srcRow < MIN_BOARD_ROWS || srcRow >= MAX_BOARD_ROWS || srcCol < MIN_BOARD_COLS || srcCol >= MAX_BOARD_COLS || destRow < MIN_BOARD_ROWS || destRow >= MAX_BOARD_ROWS || destCol < MIN_BOARD_COLS || destCol >= MAX_BOARD_COLS)
+	{
+		return false; // out of bounds
+	}
+}
+
+
+bool isCurrentPlayerPieceOnSource(const std::vector<std::vector<Piece*>>& board,
+	int srcRow, int srcCol, char currentPlayerColor)
+{
+	// Check if the source position is valid and within the board bound
+	if (srcRow < MIN_BOARD_ROWS || srcRow >= MAX_BOARD_ROWS || srcCol < MIN_BOARD_COLS || srcCol >= MAX_BOARD_COLS)
+		return false;
+
+	// het the piece at the source position
+	Piece* piece = board[srcRow][srcCol];
+
+	// Check if there is a piece and if it belongs to the current player
+	if (piece != nullptr && piece->getColor() == currentPlayerColor)
+	{
+		return true;
+	}
+
+	return false;
+}
+
+
+
+void play(Pipe p,Manager game)
 {
 	// get message from graphics
 	char msgToGraphics[1024];
@@ -63,11 +98,41 @@ void play(Pipe p)
 
 	while (msgFromGraphics != "quit")
 	{
-		// should handle the string the sent from graphics
-		// according the protocol. Ex: e2e4           (move e2 to e4)
+		std::string source = msgFromGraphics.substr(0, 2);
+		std::string destination = msgFromGraphics.substr(2, 2); 
+		std::vector<std::vector<Piece*>> _board;
 
-		// YOUR CODE
-		strcpy_s(msgToGraphics, "YOUR CODE"); // msgToGraphics should contain the result of the operation
+		int srcRow = 8 - (source[1] - '0'); 
+		int srcCol = source[0] - 'a';
+		int destRow = 8 - (destination[1] - '0');
+		int destCol = destination[0] - 'a';
+		int currentPlayerTurn = game.GetTurn();
+
+		// check if there an current player piece on source square
+
+		if (isCurrentPlayerPieceOnSource(_board, srcRow, srcCol, currentPlayerTurn))
+		{
+			strcpy_s(msgToGraphics, "YOUR CODE");
+
+			int r = rand() % 10;
+			msgToGraphics[0] = (char)(2 + '0');
+			msgToGraphics[1] = 0;
+
+		}
+
+		// check if the move is on the board 
+		if (isOnBoard(srcRow, srcCol, destRow, destCol))
+		{
+			strcpy_s(msgToGraphics, "YOUR CODE");
+
+			int r = rand() % 10; 
+			msgToGraphics[0] = (char)(5 + '0');
+			msgToGraphics[1] = 0;
+
+
+		}
+
+		strcpy_s(msgToGraphics, "YOUR CODE");
 
 		/******* JUST FOR EREZ DEBUGGING ******/
 		int r = rand() % 10; // just for debugging......
@@ -86,13 +151,15 @@ void play(Pipe p)
 	p.close();
 }
 
+
+
 void main()
 {
-	bool running = true;
+
+	Manager game("rnbkqbnrpppppppp################################PPPPPPPPRNBKQBNR1");
 	Pipe p = connect();
-	drawBoard(p);
-	//while (running)
-	//{
-	play(p);
-	//}
+	std::string board = game.GetBoard(); //error to draw board fix it
+	drawBoard(p,board);
+	// gameloop
+	play(p, game);
 }

@@ -81,6 +81,7 @@ std::string Manager::GetBoard() const
 	return board;
 }
 
+
 int Manager::GetTurn() const
 {
 	return this->_turn;
@@ -101,4 +102,14 @@ void Manager::SetBoard(const std::string& board)
 			_board[row][col] = createPiece(piece, color);
 		}
 	}
+}
+
+void Manager::SetTurnWhite()
+{
+		_turn = 0; // Switch to White
+}
+
+void Manager::SetTurnBlack()
+{
+		_turn = 1; // Switch to Black
 }

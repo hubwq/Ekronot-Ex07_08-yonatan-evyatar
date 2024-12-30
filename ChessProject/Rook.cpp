@@ -1,3 +1,5 @@
+#ifndef ROOK_H
+#define ROOK_H
 #include "Rook.h"
 
 Rook::Rook(const int color) : Piece("Knight", color)
@@ -28,3 +30,4 @@ void Rook::Move(const Manager& board, const std::string& move) const
 		//throw MoveSizeExeption();
 	}
 }
+#endif // ROOK_H

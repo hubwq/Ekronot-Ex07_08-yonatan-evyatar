@@ -1,8 +1,13 @@
+#ifndef PAWN_H
+#define PAWN_H
+
 #include "Pawn.h"
 
 Pawn::Pawn(const int color) : Piece("Pawn", color)
 {
 }
+
+
 
 Pawn::~Pawn()
 {
@@ -28,3 +33,4 @@ void Pawn::Move(const Manager& board, const std::string& move) const
 		//throw MoveSizeExeption();
 	}
 }
+#endif // PAWN_H
