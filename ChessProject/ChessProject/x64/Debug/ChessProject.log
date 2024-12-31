@@ -1,4 +1,5 @@
-﻿  main.cpp
-C:\Users\Cyber_User\OneDrive\Magshimim\c++\chess\Ekronot-Ex07_08-yonatan-evyatar\ChessProject\main.cpp(165,6): warning C4326: return type of 'main' should be 'int' instead of 'void'
-C:\Users\Cyber_User\OneDrive\Magshimim\c++\chess\Ekronot-Ex07_08-yonatan-evyatar\ChessProject\main.cpp(63,1): warning C4715: 'isOnBoard': not all control paths return a value
+﻿  Bishop.cpp
+  Queen.cpp
+  Rook.cpp
+  Generating Code...
   ChessProject.vcxproj -> C:\Users\Cyber_User\OneDrive\Magshimim\c++\chess\Ekronot-Ex07_08-yonatan-evyatar\ChessProject\x64\Debug\ChessProject.exe

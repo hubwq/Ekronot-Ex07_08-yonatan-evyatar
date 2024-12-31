@@ -117,10 +117,10 @@ void play(Pipe& p,Manager& game)
 			msgToGraphics[0] = (char)(2 + '0'); 
 			msgToGraphics[1] = '\0'; 
 
-			// send the message to the graphics system
+			// send the message to the graphics
 			p.sendMessageToGraphics(msgToGraphics);
 
-			// get a response from the graphics system
+			// get a response from the graphics 
 			msgFromGraphics = p.getMessageFromGraphics();
 
 			continue;
