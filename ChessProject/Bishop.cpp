@@ -13,7 +13,7 @@ Bishop::~Bishop()
 {
 }
 
-void Bishop::Move(Manager& board, const std::string& move) const
+void Bishop::Move(const Manager& board, const std::string& move) const
 {
 	std::string boardstr = board.GetBoard();
 	MoveExeption error;
@@ -21,9 +21,9 @@ void Bishop::Move(Manager& board, const std::string& move) const
 	// Check if the move is ok for any piece
 	if (error.checkMove(boardstr, board.GetTurn(), move))
 	{
-		int sRow = '8' - move[1];
+		int sRow = move[1] - '1';
 		int sCol = move[0] - 'a';
-		int dRow = '8' - move[3];
+		int dRow = move[3] - '1';
 		int dCol = move[2] - 'a';
 		// Check if the dest is in dioginal from the sourc
 		if (abs(sCol - dCol) == abs(sRow - dRow))
@@ -41,11 +41,6 @@ void Bishop::Move(Manager& board, const std::string& move) const
 				currentRow += rowStep;
 				currentCol += colStep;
 			}
-
-			boardstr[dRow * 8 + dCol] = boardstr[sRow * 8 + sCol];
-			boardstr[sRow * 8 + sCol] = '#';
-			board.SetBoard(boardstr);
-			board.SwitchTurn();
 
 			throw MoveExeption("0\0");
 		}

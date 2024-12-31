@@ -7,7 +7,6 @@
 #include "Queen.h"
 #include "BoardSizeExeption.h"
 #include "PieceExeption.h"
-#include <iostream>
 
 Piece* Manager::createPiece(const char piece, const int color)
 {
@@ -41,7 +40,7 @@ Manager::Manager(const std::string& board) : _turn(int(board[64] - '0') ? 1 : 0)
 	{
 		throw BoardSizeExeption();
 	}
-
+	_boardStr = board;
 	_board.resize(8, std::vector<Piece*>(8, nullptr));
 
 	SetBoard(board);
@@ -59,6 +58,7 @@ Manager::~Manager()
 	}
 }
 
+// not return a good board
 std::string Manager::GetBoard() const
 {
 	std::string board = "";
@@ -82,6 +82,28 @@ std::string Manager::GetBoard() const
 	return board;
 }
 
+std::vector<std::vector<Piece*>> Manager::GetBoardVector()
+{
+	return _board;
+}
+
+
+std::string Manager::GetStartingBoardStr() const
+{
+	return _boardStr;
+}
+
+// check if the move is from place and to place inside board bound
+void Manager::drawBoard(Pipe& p, std::string& board)
+{
+	char msgToGraphics[1024];
+
+
+	strcpy_s(msgToGraphics, board.c_str());
+	p.sendMessageToGraphics(msgToGraphics);   // send the board string
+}
+
+
 
 int Manager::GetTurn() const
 {
@@ -97,11 +119,6 @@ void Manager::SetBoard(const std::string& board)
 		int col = i % 8;
 		char piece = board[i];
 
-		if (_board[row][col] != nullptr) {
-			delete _board[row][col];
-			_board[row][col] = nullptr;
-		}
-
 		if (piece != '#')
 		{
 			int color = isupper(piece) ? 0 : 1; // Upparcase = white, Lowercase = black
@@ -110,34 +127,12 @@ void Manager::SetBoard(const std::string& board)
 	}
 }
 
-void Manager::SwitchTurn()
+void Manager::SetTurnWhite()
 {
-	this->_turn = this->_turn ? 0 : 1;
+		_turn = 0; // Switch to White
 }
 
-void Manager::printBoard()
+void Manager::SetTurnBlack()
 {
-	std::string board = this->GetBoard();
-
-	for (int i = 0; i < 8; i++)
-	{
-		for (int j = 0; j < 7; j++)
-		{
-			std::cout << board[i * 8 + j] << ' ';
-		}
-		std::cout << board[i*8 + 7] << '\n';
-	}
-}
-
-void Manager::MoveBoard(std::string move)
-{
-	MoveExeption error;
-	if (error.checkMove(this->GetBoard(), this->_turn, move))
-	{
-		this->_board['8' - move[1]][move[0] - 'a']->Move(*this, move);
-	}
-	else
-	{
-		throw error;
-	}
+		_turn = 1; // Switch to Black
 }

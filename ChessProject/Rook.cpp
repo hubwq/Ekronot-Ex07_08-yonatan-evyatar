@@ -2,7 +2,7 @@
 #define ROOK_H
 #include "Rook.h"
 
-Rook::Rook(const int color) : Piece("Rook", color)
+Rook::Rook(const int color) : Piece("Knight", color)
 {
 }
 
@@ -11,7 +11,7 @@ Rook::~Rook()
 }
 
 
-void Rook::Move(Manager& board, const std::string& move) const
+void Rook::Move(const Manager& board, const std::string& move) const
 {
 	std::string boardstr = board.GetBoard();
 
@@ -30,4 +30,5 @@ void Rook::Move(Manager& board, const std::string& move) const
 		//throw MoveSizeExeption();
 	}
 }
+
 #endif // ROOK_H

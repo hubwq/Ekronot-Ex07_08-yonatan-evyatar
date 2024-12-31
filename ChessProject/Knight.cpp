@@ -4,7 +4,7 @@
 #include "Knight.h"
 
 
-Knight::Knight(const int color): Piece("nKnight", color)
+Knight::Knight(const int color): Piece("Knight", color)
 {
 }
 
@@ -12,7 +12,7 @@ Knight::~Knight()
 {
 }
 
-void Knight::Move(Manager& board, const std::string& move) const
+void Knight::Move(const Manager& board, const std::string& move) const
 {
 	std::string boardstr = board.GetBoard();
 
