@@ -7,6 +7,7 @@
 #include "Queen.h"
 #include "BoardSizeExeption.h"
 #include "PieceExeption.h"
+#include <iostream>
 
 Piece* Manager::createPiece(const char piece, const int color)
 {
@@ -112,4 +113,18 @@ void Manager::SetTurnWhite()
 void Manager::SetTurnBlack()
 {
 		_turn = 1; // Switch to Black
+}
+
+void Manager::printBoard()
+{
+	std::string board = this->GetBoard();
+
+	for (int i = 0; i < 8; i++)
+	{
+		for (int j = 0; j < 7; j++)
+		{
+			std::cout << board[i * 8 + j] << ' ';
+		}
+		std::cout << board[i*8 + 7] << '\n';
+	}
 }

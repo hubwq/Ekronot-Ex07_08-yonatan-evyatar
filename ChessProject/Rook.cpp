@@ -2,7 +2,7 @@
 #define ROOK_H
 #include "Rook.h"
 
-Rook::Rook(const int color) : Piece("Knight", color)
+Rook::Rook(const int color) : Piece("Rook", color)
 {
 }
 
