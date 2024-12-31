@@ -19,14 +19,12 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\Frontend\Pipe.h" />
     <ClInclude Include="Bishop.h" />
     <ClInclude Include="BoardSizeExeption.h" />
     <ClInclude Include="King.h" />
     <ClInclude Include="Knight.h" />
     <ClInclude Include="Manager.h" />
     <ClInclude Include="MoveExeption.h" />
-    <ClInclude Include="MoveSizeExeption.h" />
     <ClInclude Include="Pawn.h" />
     <ClInclude Include="Piece.h" />
     <ClInclude Include="PieceExeption.h" />

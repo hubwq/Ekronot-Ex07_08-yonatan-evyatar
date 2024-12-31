@@ -11,6 +11,7 @@ private:
 	
 public:
 	MoveExeption();
+	MoveExeption(const char* errorcode);
 	~MoveExeption();
 
 	bool checkMove(const std::string& board, const int playerColor, const std::string& move);

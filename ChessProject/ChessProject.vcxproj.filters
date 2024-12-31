@@ -30,9 +30,6 @@
     <ClInclude Include="PieceExeption.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="MoveSizeExeption.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Knight.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -46,9 +43,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Queen.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Frontend\Pipe.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="MoveExeption.h">
@@ -80,10 +74,10 @@
     <ClCompile Include="Queen.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="main.cpp">
+    <ClCompile Include="MoveExeption.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="MoveExeption.cpp">
+    <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

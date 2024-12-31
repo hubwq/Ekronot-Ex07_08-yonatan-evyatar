@@ -16,9 +16,12 @@ private:
 public:
 	Manager(const std::string& board);
 	~Manager();
+
 	std::string GetBoard() const;
 	int GetTurn() const;
+	
 	void SetBoard(const std::string& board);
+
 	void SetTurnWhite();
 	void SetTurnBlack();
 };

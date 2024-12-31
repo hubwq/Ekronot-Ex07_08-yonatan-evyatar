@@ -4,6 +4,11 @@ MoveExeption::MoveExeption()
 {
 }
 
+MoveExeption::MoveExeption(const char* errorcode)
+	: _errormsg(errorcode)
+{
+}
+
 MoveExeption::~MoveExeption()
 {
 }
@@ -24,29 +29,38 @@ bool MoveExeption::checkMove(const std::string & board, const int playerColor, c
 		char srcCol = move[0];
 		char dstRow = move[3];
 		char dstCol = move[2];
-		// Legal move format
-		if ((srcCol >= 'a' && srcCol <= 'h') && (srcRow >= '1' || srcRow <= '8') && (dstCol >= 'a' && dstCol <= 'h') && (dstRow >= '1' || dstRow <= '8'))
+
+		// Sourc is not dest
+		if(srcRow == dstRow && srcCol == dstCol)
 		{
-			int sRow = srcRow - '0';
-			int sCol = srcCol - 'a';
-			int dRow = dstRow - '0';
-			int dCol = dstCol - 'a';
-			// Source is legal
-			if (board[(sRow-1)*8 + sCol] != '#' && islower(board[(sRow - 1) * 8 + sCol]) == playerColor)
+		// Legal move format
+			if ((srcCol >= 'a' && srcCol <= 'h') && (srcRow >= '1' || srcRow <= '8') && (dstCol >= 'a' && dstCol <= 'h') && (dstRow >= '1' || dstRow <= '8'))
 			{
-				// Dest is legal
-				if (board[(dRow - 1) * 8 + dCol] != '#' && islower(board[(dRow - 1) * 8 + dCol]) != playerColor)
+				int sRow = srcRow - '1';
+				int sCol = srcCol - 'a';
+				int dRow = dstRow - '1';
+				int dCol = dstCol - 'a';
+				// Source is legal
+				if (board[(sRow - 1) * 8 + sCol] != '#' && islower(board[(sRow - 1) * 8 + sCol]) == playerColor)
 				{
-					return true;
+					// Dest is legal
+					if (board[(dRow - 1) * 8 + dCol] != '#' && islower(board[(dRow - 1) * 8 + dCol]) != playerColor)
+					{
+						return true;
+					}
+					else
+					{
+						this->_errormsg = "3\0";
+					}
 				}
 				else
 				{
-					this->_errormsg = "3\0";
+					this->_errormsg = "2\0";
 				}
 			}
 			else
 			{
-				this->_errormsg = "2\0";
+				this->_errormsg = "7\0";
 			}
 		}
 		else
