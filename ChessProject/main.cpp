@@ -50,30 +50,27 @@ Pipe connect()
 }
 
 
-
-
-
+// check if move is valid - square on board
 bool isOnBoard(int srcRow, int srcCol, int destRow, int destCol)
 {
-	// Check if source and destination positions are on the board
+	// check if source and destination positions are on the board
 	if (srcRow < MIN_BOARD_ROWS || srcRow >= MAX_BOARD_ROWS || srcCol < MIN_BOARD_COLS || srcCol >= MAX_BOARD_COLS || destRow < MIN_BOARD_ROWS || destRow >= MAX_BOARD_ROWS || destCol < MIN_BOARD_COLS || destCol >= MAX_BOARD_COLS)
 	{
 		return false; // out of bounds
 	}
 }
 
-
+// check if move is valid -  current player piece
 bool isCurrentPlayerPieceOnSource(const std::vector<std::vector<Piece*>>& board,int srcRow, int srcCol, char currentPlayerColor)
 {
-
 	Piece* piece = board[srcRow][srcCol];
 
-	// Check if there is a piece and if it belongs to the current player
+	// check if there is a piece and if it belongs to the current player
 	return (piece != nullptr && piece->getColor() == currentPlayerColor);
 }
 
 
-
+// play func responsible to game loop
 void play(Pipe& p,Manager& game)
 {
 	// get message from graphics
@@ -93,30 +90,12 @@ void play(Pipe& p,Manager& game)
 		int destCol = destination[0] - 'a';
 
 	    
-		//check if the move is on the board 
-		//if (isOnBoard(srcRow, srcCol, destRow, destCol))
-		//{
-		//	strcpy_s(msgToGraphics, "YOUR CODE");
-		//	int r = rand() % 10;
-		//	msgToGraphics[0] = (char)(5 + '0');
-		//	msgToGraphics[1] = 0;
-
-		//	p.sendMessageToGraphics(msgToGraphics);
-
-		//	// get message from graphics
-		//	msgFromGraphics = p.getMessageFromGraphics();
-
-		//	continue;
-		//}
-
-
-		// check if there an current player piece on source square
-		if (isCurrentPlayerPieceOnSource(game.GetBoardVector(), srcRow, srcCol, currentPlayerTurn))
+		// check if the move is on the board 
+		if (!(isOnBoard(srcRow, srcCol, destRow, destCol)))
 		{
 			strcpy_s(msgToGraphics, "YOUR CODE");
-
 			int r = rand() % 10;
-			msgToGraphics[0] = (char)(2 + '0');
+			msgToGraphics[0] = (char)(5 + '0');
 			msgToGraphics[1] = 0;
 
 			p.sendMessageToGraphics(msgToGraphics);
@@ -125,16 +104,33 @@ void play(Pipe& p,Manager& game)
 			msgFromGraphics = p.getMessageFromGraphics();
 
 			continue;
-
 		}
 
 
+		// check if there is no current players piece on the source square
+		if (!(isCurrentPlayerPieceOnSource(game.GetBoardVector(), srcRow, srcCol, currentPlayerTurn)))
+		{
 
-		// valid move
+			strcpy_s(msgToGraphics, "Invalid source square");
+
+
+			msgToGraphics[0] = (char)(2 + '0'); 
+			msgToGraphics[1] = '\0'; 
+
+			// send the message to the graphics system
+			p.sendMessageToGraphics(msgToGraphics);
+
+			// get a response from the graphics system
+			msgFromGraphics = p.getMessageFromGraphics();
+
+			continue;
+		}
+
+
 		strcpy_s(msgToGraphics, "YOUR CODE");
 
-		int r = rand() % 10; // just for debugging......
-		msgToGraphics[0] = (char)(1 + '0');
+		int r = rand() % 10; 
+		msgToGraphics[0] = (char)(0 + '0');
 		msgToGraphics[1] = 0;
 
 
@@ -146,11 +142,15 @@ void play(Pipe& p,Manager& game)
 		if (currentPlayerTurn == WHITE)
 		{
 			game.SetTurnBlack();
+			currentPlayerTurn = game.GetTurn();
 		}
+
 		else if (currentPlayerTurn == BLACK)
 		{
 			game.SetTurnWhite();
+			currentPlayerTurn = game.GetTurn();
 		}
+
 
 	}
 
@@ -166,6 +166,7 @@ void main()
 	Pipe p = connect();
 	std::string board = game.GetStartingBoardStr();
 	game.drawBoard(p,board);
+
 	// gameloop
 	play(p, game);
 }
