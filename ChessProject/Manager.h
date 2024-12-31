@@ -21,9 +21,9 @@ public:
 	int GetTurn() const;
 	
 	void SetBoard(const std::string& board);
-	void SetTurnWhite();
-	void SetTurnBlack();
+	void SwitchTurn();
 
 	void printBoard();
+	void MoveBoard(std::string move);
 };
 

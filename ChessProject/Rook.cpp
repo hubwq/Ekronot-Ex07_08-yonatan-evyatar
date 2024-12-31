@@ -11,7 +11,7 @@ Rook::~Rook()
 }
 
 
-void Rook::Move(const Manager& board, const std::string& move) const
+void Rook::Move(Manager& board, const std::string& move) const
 {
 	std::string boardstr = board.GetBoard();
 

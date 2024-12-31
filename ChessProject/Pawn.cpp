@@ -14,7 +14,7 @@ Pawn::~Pawn()
 }
 
 
-void Pawn::Move(const Manager& board, const std::string& move) const
+void Pawn::Move(Manager& board, const std::string& move) const
 {
 	std::string boardstr = board.GetBoard();
 

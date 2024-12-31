@@ -1,6 +1,2 @@
-﻿  Manager.cpp
-  Rook.cpp
-  main.cpp
-C:\Magshimim\C++\Ekronot-Ex07_08-yonatan-evyatar\ChessProject\main.cpp(4,6): warning C4326: return type of 'main' should be 'int' instead of 'void'
-  Generating Code...
+﻿  MoveExeption.cpp
   ChessProject.vcxproj -> C:\Magshimim\C++\Ekronot-Ex07_08-yonatan-evyatar\ChessProject\x64\Debug\ChessProject.exe

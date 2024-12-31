@@ -97,6 +97,11 @@ void Manager::SetBoard(const std::string& board)
 		int col = i % 8;
 		char piece = board[i];
 
+		if (_board[row][col] != nullptr) {
+			delete _board[row][col];
+			_board[row][col] = nullptr;
+		}
+
 		if (piece != '#')
 		{
 			int color = isupper(piece) ? 0 : 1; // Upparcase = white, Lowercase = black
@@ -105,14 +110,9 @@ void Manager::SetBoard(const std::string& board)
 	}
 }
 
-void Manager::SetTurnWhite()
+void Manager::SwitchTurn()
 {
-		_turn = 0; // Switch to White
-}
-
-void Manager::SetTurnBlack()
-{
-		_turn = 1; // Switch to Black
+	this->_turn = this->_turn ? 0 : 1;
 }
 
 void Manager::printBoard()
@@ -126,5 +126,18 @@ void Manager::printBoard()
 			std::cout << board[i * 8 + j] << ' ';
 		}
 		std::cout << board[i*8 + 7] << '\n';
+	}
+}
+
+void Manager::MoveBoard(std::string move)
+{
+	MoveExeption error;
+	if (error.checkMove(this->GetBoard(), this->_turn, move))
+	{
+		this->_board['8' - move[1]][move[0] - 'a']->Move(*this, move);
+	}
+	else
+	{
+		throw error;
 	}
 }
