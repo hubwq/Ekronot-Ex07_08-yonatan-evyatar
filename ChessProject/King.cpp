@@ -14,21 +14,45 @@ King::~King()
 
 void King::Move(const Manager& board, const std::string& move) const
 {
-	std::string boardstr = board.GetBoard();
+    std::string boardstr = board.GetBoard();
+    MoveExeption error;
 
-	if (move.length() == 4)
-	{
-		if ((move[0] >= 'a' && move[0] <= 'h') && (move[1] >= '1' || move[1] <= '8') && (move[2] >= 'a' && move[2] <= 'h') && (move[3] >= '1' || move[3] <= '8'))
-		{
-			int sourcRow = move[0] - 'a';
-			int sourcCol = move[1] - '0';
-			int destRow = move[2] - 'a';
-			int destCol = move[3] - '0';
-		}
-	}
-	else
-	{
-		//throw MoveSizeExeption();
-	}
+    // check if the move is valid for any piece
+    if (error.checkMove(boardstr, board.GetTurn(), move)) {
+        int sRow = '8' - move[1];
+        int sCol = move[0] - 'a';
+        int dRow = '8' - move[3];
+        int dCol = move[2] - 'a';
+
+        // calculate movement deltas
+        int rowDelta = dRow - sRow;
+        int colDelta = dCol - sCol;
+
+        // valid queen movement
+        if (abs(rowDelta) <= 1 && abs(colDelta) <= 1) 
+        {
+            int rowStep = (rowDelta == 0) ? 0 : (rowDelta > 0 ? 1 : -1);
+            int colStep = (colDelta == 0) ? 0 : (colDelta > 0 ? 1 : -1);
+
+            int currentRow = sRow + rowStep;
+            int currentCol = sCol + colStep;
+
+            if (boardstr[currentRow * 8 + currentCol] != '#')
+            {
+                throw MoveExeption("3\0");
+            }
+            currentRow += rowStep;
+            currentCol += colStep;
+            throw MoveExeption("0\0");
+        }
+        else
+        {
+            throw MoveExeption("6\0");
+        }
+    }
+    else
+    {
+        throw error; // Forward the error from checkMove
+    }
 }
 #endif // KING_H

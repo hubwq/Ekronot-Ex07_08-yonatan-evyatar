@@ -103,6 +103,8 @@ void play(Pipe& p, Manager& game)
         std::vector<std::vector<Piece*>> board = game.GetBoardVector();
         std::string move = msgFromGraphics.substr(0, 4);
 
+
+
         int srcRow = 8 - (source[1] - '0');
         int srcCol = source[0] - 'a';
         int destRow = 8 - (destination[1] - '0');
@@ -137,6 +139,21 @@ void play(Pipe& p, Manager& game)
 
             continue;
         }
+
+        if ( srcRow == destRow && srcCol == destCol)
+        {
+            strcpy_s(msgToGraphics, "source square and destination are equal");
+            msgToGraphics[0] = (char)(7 + '0');
+            msgToGraphics[1] = '\0';
+
+            p.sendMessageToGraphics(msgToGraphics);
+
+            // get a response from the graphics 
+            msgFromGraphics = p.getMessageFromGraphics();
+
+            continue;
+        }
+
 
         //////////////////////////////////////////////////////////
         // move piece
@@ -178,7 +195,7 @@ void play(Pipe& p, Manager& game)
 
 int main()
 {
-    Manager game("rnbkqbnrppp#pppp################################PPP#PPPPRNBKQBNR0");
+    Manager game("rnbkqbnrpppp##pp################################PPP##PPPRNBKQBNR0");
     Pipe p = connect();
     std::string board = game.GetStartingBoardStr();
     game.drawBoard(p, board);

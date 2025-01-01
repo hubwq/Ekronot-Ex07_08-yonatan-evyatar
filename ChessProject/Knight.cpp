@@ -15,33 +15,20 @@ Knight::~Knight()
 void Knight::Move(const Manager& board, const std::string& move) const
 {
 	std::string boardstr = board.GetBoard();
-	MoveExeption error;
 
-	// check if the move is ok for any piece
-	if (error.checkMove(boardstr, board.GetTurn(), move))
+	if (move.length() == 4)
 	{
-		int sRow = '8' - move[1];
-		int sCol = move[0] - 'a';
-		int dRow = '8' - move[3];
-		int dCol = move[2] - 'a';
-
-		int rowOffset = abs(dRow - sRow);
-		int colOffset = abs(dCol - sCol);
-
-		// check if the dest is in dioginal from the source
-		if ((rowOffset == 2 && colOffset == 1) || (rowOffset == 1 && colOffset == 2))
+		if ((move[0] >= 'a' && move[0] <= 'h') && (move[1] >= '1' || move[1] <= '8') && (move[2] >= 'a' && move[2] <= 'h') && (move[3] >= '1' || move[3] <= '8'))
 		{
-			// valid
-			throw MoveExeption("0\0");
-		}
-		else
-		{
-			throw MoveExeption("6\0");
+			int sourcRow = move[0] - 'a';
+			int sourcCol = move[1] - '0';
+			int destRow = move[2] - 'a';
+			int destCol = move[3] - '0';
 		}
 	}
 	else
 	{
-		throw error;
+		//throw MoveSizeExeption();
 	}
 }
 #endif // KNIGHT_H
