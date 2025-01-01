@@ -38,7 +38,7 @@ void Rook::Move(const Manager& board, const std::string& move) const
             {
                 if (boardstr[currentRow * 8 + currentCol] != '#')
                 {
-                    throw MoveExeption("5\0"); 
+                    throw MoveExeption("6\0"); 
                 }
                 currentRow += rowStep;
                 currentCol += colStep;
@@ -49,7 +49,7 @@ void Rook::Move(const Manager& board, const std::string& move) const
         }
         else
         {
-            throw MoveExeption("5\0");
+            throw MoveExeption("6\0");
         }
     }
     else
