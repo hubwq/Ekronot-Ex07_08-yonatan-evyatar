@@ -7,6 +7,5 @@ class Rook : public Piece
 public:
 	Rook(const int color);
 	~Rook();
-	void Move(const Manager& board, const std::string& move) const;
-
+	virtual void Move(const Manager& board, const std::string& move) const override;
 };

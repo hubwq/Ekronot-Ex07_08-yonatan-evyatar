@@ -15,17 +15,6 @@ using std::string;
 #define MIN_BOARD_ROWS 0
 #define MIN_BOARD_COLS 0
 
-
-
-
-
-
-
-
-
-
-
-
 // FOR DEBUG - DONT SHOW PIECES TYPE ONLY PIECES COLOR
 void printBoard(const std::vector<std::vector<Piece*>>& board)
 {
@@ -43,33 +32,6 @@ void printBoard(const std::vector<std::vector<Piece*>>& board)
         cout << endl;
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // Connect to pipe
 Pipe connect()
@@ -114,9 +76,6 @@ bool isOnBoard(int srcRow, int srcCol, int destRow, int destCol)
     return true; 
 }
 
-
-
-
 // check if the current player has a piece on the source square
 bool isCurrentPlayerPieceOnSource(const std::vector<std::vector<Piece*>>& board, int srcRow, int srcCol, int currentPlayerColor)
 {
@@ -135,13 +94,14 @@ void play(Pipe& p, Manager& game)
     // get message from graphics
     char msgToGraphics[1024];
     string msgFromGraphics = p.getMessageFromGraphics();
-    int currentPlayerTurn = game.GetTurn();
 
     while (msgFromGraphics != "quit")
     {
+        int currentPlayerTurn = game.GetTurn();
         std::string source = msgFromGraphics.substr(0, 2);
         std::string destination = msgFromGraphics.substr(2, 2);
         std::vector<std::vector<Piece*>> board = game.GetBoardVector();
+        std::string move = msgFromGraphics.substr(0, 4);
 
         int srcRow = 8 - (source[1] - '0');
         int srcCol = source[0] - 'a';
@@ -178,38 +138,31 @@ void play(Pipe& p, Manager& game)
             continue;
         }
 
-
-
-
-
         //////////////////////////////////////////////////////////
         // move piece
-        Piece* piece = board[srcRow][srcCol];
-        board[destRow][destCol] = piece;
-        board[srcRow][srcCol] = nullptr;
-            
-        printBoard(board);
-        // send move to graphics
-        strcpy_s(msgToGraphics, "Move successful");
-        msgToGraphics[0] = (char)(0 + '0'); 
-        msgToGraphics[1] = 0;
+        try
+        {
+            game.MoveBoard(move);
+        }
+        catch (MoveExeption e)
+        {
+            printBoard(board);
+            // send move to graphics
+            strcpy_s(msgToGraphics, "Move successful");
+            msgToGraphics[0] = e.what()[0];
+            msgToGraphics[1] = 0;
+        }
 
         p.sendMessageToGraphics(msgToGraphics);
+
+        if (msgToGraphics[0] == '0' || msgToGraphics[0] == '1')
+        {
+            game.SwitchTurn();
+        }
 
         // get message from graphics
         msgFromGraphics = p.getMessageFromGraphics();
 
-
-        if (currentPlayerTurn == WHITE)
-        {
-            game.SetTurnBlack();
-            currentPlayerTurn = game.GetTurn();
-        }
-        else if (currentPlayerTurn == BLACK)
-        {
-            game.SetTurnWhite();
-            currentPlayerTurn = game.GetTurn();
-        }
         //////////////////////////////////////////////////////////
 
     }
@@ -225,7 +178,7 @@ void play(Pipe& p, Manager& game)
 
 int main()
 {
-    Manager game("rnbkqbnrpppppppp################################PPPPPPPPRNBKQBNR0");
+    Manager game("rnbkqbnrppp#pppp################################PPP#PPPPRNBKQBNR0");
     Pipe p = connect();
     std::string board = game.GetStartingBoardStr();
     game.drawBoard(p, board);

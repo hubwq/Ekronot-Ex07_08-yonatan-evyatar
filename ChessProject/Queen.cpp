@@ -19,9 +19,9 @@ void Queen::Move(const Manager& board, const std::string& move) const
 
     // check if the move is valid for any piece
     if (error.checkMove(boardstr, board.GetTurn(), move)) {
-        int sRow = move[1] - '1';
+        int sRow = '8' - move[1];
         int sCol = move[0] - 'a';
-        int dRow = move[3] - '1';
+        int dRow = '8' - move[3];
         int dCol = move[2] - 'a';
 
         // calculate movement deltas

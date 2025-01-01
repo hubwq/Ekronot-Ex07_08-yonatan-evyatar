@@ -119,6 +119,12 @@ void Manager::SetBoard(const std::string& board)
 		int col = i % 8;
 		char piece = board[i];
 
+		if (_board[row][col] != nullptr)
+		{
+			delete _board[row][col];
+			_board[row][col] = nullptr;
+		}
+
 		if (piece != '#')
 		{
 			int color = isupper(piece) ? 0 : 1; // Upparcase = white, Lowercase = black
@@ -127,12 +133,38 @@ void Manager::SetBoard(const std::string& board)
 	}
 }
 
-void Manager::SetTurnWhite()
+void Manager::SwitchTurn()
 {
-		_turn = 0; // Switch to White
+	this->_turn = this->_turn ? 0 : 1;
 }
 
-void Manager::SetTurnBlack()
+void Manager::MoveBoard(std::string move)
 {
-		_turn = 1; // Switch to Black
+	MoveExeption error;
+	if (error.checkMove(this->GetBoard(), this->_turn, move))
+	{
+		try
+		{
+			this->_board['8' - move[1]][move[0] - 'a']->Move(*this, move);
+		}
+		catch (MoveExeption e)
+		{
+			if (e.what()[0] == '0' || e.what()[0] == '1')
+			{
+				if (_board['8' - move[3]][move[2] - 'a'] != nullptr)
+				{
+					delete _board['8' - move[3]][move[2] - 'a'];
+					_board['8' - move[3]][move[2] - 'a'] = nullptr;
+				}
+				_board['8' - move[3]][move[2] - 'a'] = createPiece(_board['8' - move[1]][move[0] - 'a']->getName()[0], _board['8' - move[1]][move[0] - 'a']->getColor());
+				delete _board['8' - move[1]][move[0] - 'a'];
+				_board['8' - move[1]][move[0] - 'a'] = nullptr;
+			}
+			throw e;
+		}
+	}
+	else
+	{
+		throw error;
+	}
 }

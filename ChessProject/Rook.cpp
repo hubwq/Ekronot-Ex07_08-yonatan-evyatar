@@ -2,7 +2,7 @@
 #define ROOK_H
 #include "Rook.h"
 
-Rook::Rook(const int color) : Piece("Knight", color)
+Rook::Rook(const int color) : Piece("Rook", color)
 {
 }
 
@@ -19,10 +19,10 @@ void Rook::Move(const Manager& board, const std::string& move) const
     // Check if the move is valid for any piece
     if (error.checkMove(boardstr, board.GetTurn(), move))
     {
-        int sRow = move[1] - '1'; 
-        int sCol = move[0] - 'a'; 
-        int dRow = move[3] - '1'; 
-        int dCol = move[2] - 'a'; 
+        int sRow = '8' - move[1];
+        int sCol = move[0] - 'a';
+        int dRow = '8' - move[3];
+        int dCol = move[2] - 'a';
 
         // check if the move is in a straight line
         if (sRow == dRow || sCol == dCol)

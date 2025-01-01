@@ -4,7 +4,7 @@
 #include "Knight.h"
 
 
-Knight::Knight(const int color): Piece("Knight", color)
+Knight::Knight(const int color): Piece("nKnight", color)
 {
 }
 
