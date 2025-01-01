@@ -38,7 +38,7 @@ void Bishop::Move(const Manager& board, const std::string& move) const
 			{
 				if (boardstr[currentRow * 8 + currentCol] != '#') 
 				{
-					throw MoveExeption("3\0");
+					throw MoveExeption("6\0");
 				}
 				currentRow += rowStep;
 				currentCol += colStep;
