@@ -192,16 +192,24 @@ void play(Pipe& p, Manager& game)
 
 
 
+//**main function**
+///////////////////
+///////////////////
 
 int main()
 {
-    Manager game("rnbkqbnrpppp##pp################################PPP##PPPRNBKQBNR0");
+    Manager game("rnbkqbnrpppppppp################################PPPPPPPPRNBKQBNR0");
+    // connect to front
     Pipe p = connect();
+
     std::string board = game.GetStartingBoardStr();
+
     game.drawBoard(p, board);
 
     // game loop
     play(p, game);
+
+    //do checkmate screen here?
 
     return 0;
 }

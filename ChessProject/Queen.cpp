@@ -18,7 +18,8 @@ void Queen::Move(const Manager& board, const std::string& move) const
     MoveExeption error;
 
     // check if the move is valid for any piece
-    if (error.checkMove(boardstr, board.GetTurn(), move)) {
+    if (error.checkMove(boardstr, board.GetTurn(), move)) 
+    {
         int sRow = '8' - move[1];
         int sCol = move[0] - 'a';
         int dRow = '8' - move[3];

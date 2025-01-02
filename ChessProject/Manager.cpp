@@ -62,14 +62,16 @@ Manager::~Manager()
 std::string Manager::GetBoard() const
 {
 	std::string board = "";
-
+	// iterate over all 64 squares
 	for (int i = 0; i < 64; i++)
 	{
 		int row = i / 8;
 		int col = i % 8;
 
+		// vheck if there is a piece at the current square
 		if (_board[row][col] != nullptr)
-		{
+		{ 
+			// g  et the first character of the pieces name
 			board += _board[row][col]->getName()[0];
 			board[i] = (_board[row][col]->getColor()) ? tolower(board[i]) : toupper(board[i]);
 		}
@@ -113,25 +115,33 @@ int Manager::GetTurn() const
 
 void Manager::SetBoard(const std::string& board)
 {
+	// iterate over all 64 squares
 	for (int i = 0; i < 64; i++)
 	{
-		int row = i / 8;
-		int col = i % 8;
+		int row = i / 8; 
+		int col = i % 8;  
+
 		char piece = board[i];
 
+		// if there is an existing piece at the current square
 		if (_board[row][col] != nullptr)
 		{
 			delete _board[row][col];
 			_board[row][col] = nullptr;
 		}
 
+		// if the square is not empty '#'
 		if (piece != '#')
 		{
-			int color = isupper(piece) ? 0 : 1; // Upparcase = white, Lowercase = black
+			// determine the color of the piece
+			int color = isupper(piece) ? 0 : 1;
+
+			// create the new piece 
 			_board[row][col] = createPiece(piece, color);
 		}
 	}
 }
+
 
 void Manager::SwitchTurn()
 {
@@ -141,30 +151,47 @@ void Manager::SwitchTurn()
 void Manager::MoveBoard(std::string move)
 {
 	MoveExeption error;
+
+	// validate the move using the current board state and turn
 	if (error.checkMove(this->GetBoard(), this->_turn, move))
 	{
 		try
 		{
+			// Execute the move 
 			this->_board['8' - move[1]][move[0] - 'a']->Move(*this, move);
 		}
 		catch (MoveExeption e)
 		{
+			// handle special move exceptions 
 			if (e.what()[0] == '0' || e.what()[0] == '1')
 			{
+				// check if there is a pieceto kill 
 				if (_board['8' - move[3]][move[2] - 'a'] != nullptr)
 				{
+					// delete the piece at the target position
 					delete _board['8' - move[3]][move[2] - 'a'];
 					_board['8' - move[3]][move[2] - 'a'] = nullptr;
 				}
-				_board['8' - move[3]][move[2] - 'a'] = createPiece(_board['8' - move[1]][move[0] - 'a']->getName()[0], _board['8' - move[1]][move[0] - 'a']->getColor());
+
+				// promote the piece or handle the special move
+				_board['8' - move[3]][move[2] - 'a'] = createPiece(
+					_board['8' - move[1]][move[0] - 'a']->getName()[0],
+					_board['8' - move[1]][move[0] - 'a']->getColor()
+				);
+
+				// delete the original piece 
 				delete _board['8' - move[1]][move[0] - 'a'];
 				_board['8' - move[1]][move[0] - 'a'] = nullptr;
+
+				// pawn promote
 			}
+
 			throw e;
 		}
 	}
 	else
 	{
+
 		throw error;
 	}
 }
