@@ -30,17 +30,17 @@ void Pawn::Move(const Manager& board, const std::string& move) const
 		int rowStep = (board.GetTurn() == 0) ? 1 : -1;
 
 		// check normal move
-		if (sRow == dRow + rowStep && sCol == dCol)
+		if (sRow == dRow + rowStep && sCol == dCol && boardstr[dRow * 8 + dCol] == '#')
 		{
 
 			throw MoveExeption("0\0");
 		}
 
-		// check kill move
+		// check dioginal eat move
 		else if (sRow == dRow + rowStep && (sCol == dCol + DIOGINAL || sCol == dCol - DIOGINAL))
 		{
 			// if the dest square is not enemy piece
-			if(boardstr[dRow * 8 + dCol] == '#' && bool(islower(boardstr[sRow * 8 + sCol])) == bool(islower(boardstr[dRow * 8 + dCol])))
+			if(boardstr[dRow * 8 + dCol] == '#')
 			{
 				throw MoveExeption("6\0");
 			}
