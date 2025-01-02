@@ -2,6 +2,7 @@
 #define PAWN_H
 
 #include "Pawn.h"
+#define DIOGINAL 1
 
 Pawn::Pawn(const int color) : Piece("Pawn", color)
 {
@@ -13,24 +14,46 @@ Pawn::~Pawn()
 {
 }
 
-
+// pawn move
 void Pawn::Move(const Manager& board, const std::string& move) const
 {
 	std::string boardstr = board.GetBoard();
+	MoveExeption error;
 
-	if (move.length() == 4)
+	if (error.checkMove(boardstr, board.GetTurn(), move))
 	{
-		if ((move[0] >= 'a' && move[0] <= 'h') && (move[1] >= '1' || move[1] <= '8') && (move[2] >= 'a' && move[2] <= 'h') && (move[3] >= '1' || move[3] <= '8'))
+		int sRow = '8' - move[1];
+		int sCol = move[0] - 'a';
+		int dRow = '8' - move[3];
+		int dCol = move[2] - 'a';
+
+		int rowStep = (board.GetTurn() == 0) ? 1 : -1;
+
+		// check normal move
+		if (sRow == dRow + rowStep && sCol == dCol)
 		{
-			int sourcRow = move[0] - 'a';
-			int sourcCol = move[1] - '0';
-			int destRow = move[2] - 'a';
-			int destCol = move[3] - '0';
+
+			throw MoveExeption("0\0");
+		}
+
+		// check kill move
+		else if (sRow == dRow + rowStep && (sCol == dCol + DIOGINAL || sCol == dCol - DIOGINAL))
+		{
+			// if the dest square is not enemy piece
+			if(boardstr[dRow * 8 + dCol] == '#' && bool(islower(boardstr[sRow * 8 + sCol])) == bool(islower(boardstr[dRow * 8 + dCol])))
+			{
+				throw MoveExeption("6\0");
+			}
+			throw MoveExeption("0\0");
+		}
+		else
+		{
+			throw MoveExeption("6\0");
 		}
 	}
 	else
 	{
-		//throw MoveSizeExeption();
+		throw MoveExeption("6\0");
 	}
 }
 #endif // PAWN_H
