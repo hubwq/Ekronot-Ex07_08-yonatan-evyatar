@@ -13,7 +13,7 @@ Bishop::~Bishop()
 {
 }
 
-void Bishop::Move(const Manager& board, const std::string& move) const
+void Bishop::Move(Manager& board, const std::string& move) const
 {
 	std::string boardstr = board.GetBoard();
 

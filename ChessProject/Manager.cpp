@@ -211,6 +211,17 @@ void Manager::MoveBoard(const std::string& move)
 	}
 }
 
+
+int Manager::getLastDoubleMove()
+{
+	return this->lastDoubleMove;
+}
+
+void Manager::setLastDoubleMove(int index)
+{
+	this->lastDoubleMove = index;
+}
+
 /*
 * check if the king is in chess
 * true  - in chess
@@ -220,7 +231,7 @@ bool Manager::isChess(int playerColor)
 {
 	int kingRow = -1, kingCol = -1;
 
-	// Find king position
+	// find king position
 	for (int row = 0; row < 8; row++)
 	{
 		for (int col = 0; col < 8; col++)

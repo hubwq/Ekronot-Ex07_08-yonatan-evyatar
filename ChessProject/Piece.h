@@ -18,6 +18,6 @@ public:
 	std::string getName() const;
 	int getColor() const;
 
-	virtual void Move(const Manager& board, const std::string& move) const = 0;
+	virtual void Move(Manager& board, const std::string& move) const = 0;
 };
 

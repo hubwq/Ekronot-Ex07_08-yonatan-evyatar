@@ -13,13 +13,14 @@ private:
 	std::string _boardStr;
 	int _turn;
 	Piece* createPiece(const char piece, const int color);
+	int lastDoubleMove;
 
 public:
 	Manager(const std::string& board);
 	~Manager();
 	std::string GetBoard() const;
 	std::vector<std::vector<Piece*>> GetBoardVector();
-	std::string GetStartingBoardStr()const;
+	std::string GetStartingBoardStr() const;
 	void drawBoard(Pipe& p, std::string& board);
 	int GetTurn() const;
 	
@@ -27,7 +28,8 @@ public:
 
 	void SwitchTurn();
 	void MoveBoard(const std::string& move);
-
+	int getLastDoubleMove();
+	void setLastDoubleMove(int index);
 	bool isChess(int playerColor);
 };
 

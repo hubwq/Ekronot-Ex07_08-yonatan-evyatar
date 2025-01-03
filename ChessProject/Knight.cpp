@@ -12,7 +12,7 @@ Knight::~Knight()
 {
 }
 
-void Knight::Move(const Manager& board, const std::string& move) const
+void Knight::Move(Manager& board, const std::string& move) const
 {
 	std::string boardstr = board.GetBoard();
 	
