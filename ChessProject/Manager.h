@@ -26,7 +26,8 @@ public:
 	void SetBoard(const std::string& board);
 
 	void SwitchTurn();
+	void MoveBoard(const std::string& move);
 
-	void MoveBoard(std::string move);
+	bool isChess(int playerColor);
 };
 

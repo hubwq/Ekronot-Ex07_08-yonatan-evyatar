@@ -7,6 +7,7 @@
 #include "Queen.h"
 #include "BoardSizeExeption.h"
 #include "PieceExeption.h"
+#include "MoveExeption.h"
 
 Piece* Manager::createPiece(const char piece, const int color)
 {
@@ -25,7 +26,7 @@ Piece* Manager::createPiece(const char piece, const int color)
 	case 'p':
 		return new Pawn(color);
 	default:
-		throw PieceExeption();
+		return nullptr;
 	}
 }
 
@@ -130,7 +131,7 @@ void Manager::SetBoard(const std::string& board)
 			_board[row][col] = nullptr;
 		}
 
-		// if the square is not empty '#'
+		// if the square is not empty - '#'
 		if (piece != '#')
 		{
 			// determine the color of the piece
@@ -148,7 +149,7 @@ void Manager::SwitchTurn()
 	this->_turn = this->_turn ? 0 : 1;
 }
 
-void Manager::MoveBoard(std::string move)
+void Manager::MoveBoard(const std::string& move)
 {
 	MoveExeption error;
 
@@ -162,10 +163,14 @@ void Manager::MoveBoard(std::string move)
 		}
 		catch (MoveExeption e)
 		{
-			// handle special move exceptions 
-			if (e.what()[0] == '0' || e.what()[0] == '1')
+			// If the move is legal
+			if (e.what()[0] == '0')
 			{
-				// check if there is a pieceto kill 
+				Piece* srcPiece = _board['8' - move[1]][move[0] - 'a'];
+				Piece* dstPiece = _board['8' - move[3]][move[2] - 'a'];
+				std::string dstName = (dstPiece) ? dstPiece->getName() : "#";
+				int dstColor = (dstPiece) ? dstPiece->getColor() : -1;
+				// check if there is a piece to kill 
 				if (_board['8' - move[3]][move[2] - 'a'] != nullptr)
 				{
 					// delete the piece at the target position
@@ -173,17 +178,27 @@ void Manager::MoveBoard(std::string move)
 					_board['8' - move[3]][move[2] - 'a'] = nullptr;
 				}
 
-				// promote the piece or handle the special move
-				_board['8' - move[3]][move[2] - 'a'] = createPiece(
-					_board['8' - move[1]][move[0] - 'a']->getName()[0],
-					_board['8' - move[1]][move[0] - 'a']->getColor()
-				);
+				// move the piece to dest
+				_board['8' - move[3]][move[2] - 'a'] = createPiece(srcPiece->getName()[0], srcPiece->getColor());
 
-				// delete the original piece 
+				// delete the piece from source
 				delete _board['8' - move[1]][move[0] - 'a'];
 				_board['8' - move[1]][move[0] - 'a'] = nullptr;
 
-				// pawn promote
+				// Undo move if there is 'chess' on players king
+				if (isChess(_turn))
+				{
+					_board['8' - move[1]][move[0] - 'a'] = createPiece(_board['8' - move[3]][move[2] - 'a']->getName()[0], _board['8' - move[3]][move[2] - 'a']->getColor());
+					delete _board['8' - move[3]][move[2] - 'a'];
+					_board['8' - move[3]][move[2] - 'a'] = nullptr;
+					_board['8' - move[3]][move[2] - 'a'] = createPiece(dstName[0], dstColor);
+					throw MoveExeption("4\0");
+				}
+				// check if there is 'chess' to opponent's king
+				else if (isChess((_turn) ? 0 : 1))
+				{
+					throw MoveExeption("1\0");
+				}
 			}
 
 			throw e;
@@ -194,4 +209,78 @@ void Manager::MoveBoard(std::string move)
 
 		throw error;
 	}
+}
+
+/*
+* check if the king is in chess
+* true  - in chess
+* false - no chess
+*/
+bool Manager::isChess(int playerColor)
+{
+	int kingRow = -1, kingCol = -1;
+
+	// Find king position
+	for (int row = 0; row < 8; row++)
+	{
+		for (int col = 0; col < 8; col++)
+		{
+			Piece* piece = _board[row][col];
+			if (piece && piece->getName() == "King" && piece->getColor() == playerColor)
+			{
+				kingRow = row;
+				kingCol = col;
+
+				break;
+			}
+		}
+		if (kingRow != -1)
+		{
+			break;
+		}
+	}
+
+	// if no king, there is no chess
+	if (kingRow == -1 || kingCol == -1)
+	{
+		return false;
+	}
+
+	char kingColChr = ('a' + kingCol);
+	char kingRowChr = ('8' - kingRow);
+	std::string kingPosition = { kingColChr, kingRowChr };
+
+	// check every opponent's piece on the board
+	for (int row = 0; row < 8; row++)
+	{
+		for (int col = 0; col < 8; col++)
+		{
+			Piece* piece = _board[row][col];
+			if (piece && piece->getColor() != playerColor)
+			{
+				char pieceColChr = ('a' + col);
+				char pieceRowChr = ('8' - row);
+				std::string piecePosition = { pieceColChr , pieceRowChr };
+
+				std::string move = piecePosition + kingPosition;
+
+				// check if the piece do chess to the king
+				try
+				{
+					MoveExeption e;
+					if(e.checkMove(this->GetBoard(), (playerColor) ? 0 : 1, move))
+						_board[row][col]->Move(*this, move);
+					throw e;
+				}
+				catch (MoveExeption e)
+				{
+					if (e.what()[0] == '0')
+					{
+						return true;
+					}
+				}
+			}
+		}
+	}
+	return false;
 }

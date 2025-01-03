@@ -15,49 +15,40 @@ Queen::~Queen()
 void Queen::Move(const Manager& board, const std::string& move) const 
 {
     std::string boardstr = board.GetBoard();
-    MoveExeption error;
+    
+    int sRow = '8' - move[1];
+    int sCol = move[0] - 'a';
+    int dRow = '8' - move[3];
+    int dCol = move[2] - 'a';
 
-    // check if the move is valid for any piece
-    if (error.checkMove(boardstr, board.GetTurn(), move)) 
+    // calculate movement deltas
+    int rowDelta = dRow - sRow;
+    int colDelta = dCol - sCol;
+
+    // valid queen movement
+    if (abs(rowDelta) == abs(colDelta) || rowDelta == 0 || colDelta == 0) 
     {
-        int sRow = '8' - move[1];
-        int sCol = move[0] - 'a';
-        int dRow = '8' - move[3];
-        int dCol = move[2] - 'a';
+        int rowStep = (rowDelta == 0) ? 0 : (rowDelta > 0 ? 1 : -1);
+        int colStep = (colDelta == 0) ? 0 : (colDelta > 0 ? 1 : -1);
 
-        // calculate movement deltas
-        int rowDelta = dRow - sRow;
-        int colDelta = dCol - sCol;
+        int currentRow = sRow + rowStep;
+        int currentCol = sCol + colStep;
 
-        // valid queen movement
-        if (abs(rowDelta) == abs(colDelta) || rowDelta == 0 || colDelta == 0) 
+
+        while (currentRow != dRow || currentCol != dCol) 
         {
-            int rowStep = (rowDelta == 0) ? 0 : (rowDelta > 0 ? 1 : -1);
-            int colStep = (colDelta == 0) ? 0 : (colDelta > 0 ? 1 : -1);
-
-            int currentRow = sRow + rowStep;
-            int currentCol = sCol + colStep;
-
-
-            while (currentRow != dRow || currentCol != dCol) 
+            if (boardstr[currentRow * 8 + currentCol] != '#')
             {
-                if (boardstr[currentRow * 8 + currentCol] != '#')
-                {
-                    throw MoveExeption("6\0");
-                }
-                currentRow += rowStep;
-                currentCol += colStep;
+                throw MoveExeption("6\0");
             }
-            throw MoveExeption("0\0");
+            currentRow += rowStep;
+            currentCol += colStep;
         }
-        else 
-        {
-            throw MoveExeption("6\0");
-        }
+        throw MoveExeption("0\0");
     }
-    else
+    else 
     {
-        throw error; // Forward the error from checkMove
+        throw MoveExeption("6\0");
     }
 }
 

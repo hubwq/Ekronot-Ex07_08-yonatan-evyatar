@@ -23,40 +23,32 @@ void Pawn::Move(const Manager& board, const std::string& move) const
 	const int DOUBLE_STEP = (board.GetTurn() == 0) ? -2 : 2;
 	const int DIOGINAL = 1;
 
-	if (error.checkMove(boardstr, board.GetTurn(), move))
+	int sRow = '8' - move[1];
+	int sCol = move[0] - 'a';
+	int dRow = '8' - move[3];
+	int dCol = move[2] - 'a';
+
+	if (dRow == sRow + SINGLE_STEP && sCol == dCol && boardstr[dRow * 8 + dCol] == '#')
 	{
-		int sRow = '8' - move[1];
-		int sCol = move[0] - 'a';
-		int dRow = '8' - move[3];
-		int dCol = move[2] - 'a';
+		throw MoveExeption("0\0");
+	}
 
-		if (dRow == sRow + SINGLE_STEP && sCol == dCol && boardstr[dRow * 8 + dCol] == '#')
-		{
-			throw MoveExeption("0\0");
-		}
+	else if (dRow == sRow + DOUBLE_STEP && sCol == dCol && boardstr[dRow * 8 + dCol] == '#' && ((board.GetTurn() == 0 && sRow == 6) || (board.GetTurn() == 1 && sRow == 1)))
+	{
+		throw MoveExeption("0\0");
+	}
 
-		else if (dRow == sRow + DOUBLE_STEP && sCol == dCol && boardstr[dRow * 8 + dCol] == '#' && ((board.GetTurn() == 0 && sRow == 6) || (board.GetTurn() == 1 && sRow == 1)))
-		{
-			throw MoveExeption("0\0");
-		}
-
-		// kill move dont working
-		// check dioginal kill move
-		else if (dRow == sRow + SINGLE_STEP && (dCol == sCol + DIOGINAL || dCol == sCol - DIOGINAL))
-		{
-			// if the dest square is not enemy piece
-			if (boardstr[dRow * 8 + dCol] == '#')
-			{
-				throw MoveExeption("6\0");
-			}
-			throw MoveExeption("0\0");
-		}
-		else
+	// kill move dont working
+	// check dioginal kill move
+	else if (dRow == sRow + SINGLE_STEP && (dCol == sCol + DIOGINAL || dCol == sCol - DIOGINAL))
+	{
+		// if the dest square is not enemy piece
+		if (boardstr[dRow * 8 + dCol] == '#')
 		{
 			throw MoveExeption("6\0");
 		}
+		throw MoveExeption("0\0");
 	}
-
 	else
 	{
 		throw MoveExeption("6\0");

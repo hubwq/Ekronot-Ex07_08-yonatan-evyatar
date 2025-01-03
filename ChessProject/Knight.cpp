@@ -15,33 +15,24 @@ Knight::~Knight()
 void Knight::Move(const Manager& board, const std::string& move) const
 {
 	std::string boardstr = board.GetBoard();
-	MoveExeption error;
+	
+	int sRow = '8' - move[1];
+	int sCol = move[0] - 'a';
+	int dRow = '8' - move[3];
+	int dCol = move[2] - 'a';
 
-	// check if the move is ok for any piece
-	if (error.checkMove(boardstr, board.GetTurn(), move))
+	int rowOffset = abs(dRow - sRow);
+	int colOffset = abs(dCol - sCol);
+
+	// check if the dest is in L from the source
+	if ((rowOffset == 2 && colOffset == 1) || (rowOffset == 1 && colOffset == 2))
 	{
-		int sRow = '8' - move[1];
-		int sCol = move[0] - 'a';
-		int dRow = '8' - move[3];
-		int dCol = move[2] - 'a';
-
-		int rowOffset = abs(dRow - sRow);
-		int colOffset = abs(dCol - sCol);
-
-		// check if the dest is in L from the source
-		if ((rowOffset == 2 && colOffset == 1) || (rowOffset == 1 && colOffset == 2))
-		{
-			// valid
-			throw MoveExeption("0\0");
-		}
-		else
-		{
-			throw MoveExeption("6\0");
-		}
+		// valid
+		throw MoveExeption("0\0");
 	}
 	else
 	{
-		throw error;
+		throw MoveExeption("6\0");
 	}
 }
 #endif // KNIGHT_H
