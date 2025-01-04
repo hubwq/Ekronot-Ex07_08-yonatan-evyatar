@@ -31,5 +31,6 @@ public:
 	int getLastDoubleMove();
 	void setLastDoubleMove(int index);
 	bool isChess(int playerColor);
+	bool isMate(int playerColor);
 };
 

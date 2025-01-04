@@ -172,7 +172,13 @@ void play(Pipe& p, Manager& game)
 
         p.sendMessageToGraphics(msgToGraphics);
 
-        if (msgToGraphics[0] == '0' || msgToGraphics[0] == '1')
+        if (msgToGraphics[0] == '8')
+        {
+            std::cout << "CheckMate!" << std::endl;
+            std::cout << ((game.GetTurn()) ? "Black" : "White") << " Win!" << std::endl;
+            return;
+        }
+        else if (msgToGraphics[0] == '0' || msgToGraphics[0] == '1')
         {
             game.SwitchTurn();
         }

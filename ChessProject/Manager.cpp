@@ -197,6 +197,10 @@ void Manager::MoveBoard(const std::string& move)
 				// check if there is 'chess' to opponent's king
 				else if (isChess((_turn) ? 0 : 1))
 				{
+					if (isMate((_turn) ? 0 : 1))
+					{
+						throw MoveExeption("8\0");
+					}
 					throw MoveExeption("1\0");
 				}
 			}
@@ -294,4 +298,94 @@ bool Manager::isChess(int playerColor)
 		}
 	}
 	return false;
+}
+
+/*
+* Check if there is CheckMate
+* input: int - witch player gets the mate.
+* output: if there is a mate to the player.
+*/
+bool Manager::isMate(int playerColor)
+{
+	// Check if the king is in check
+	if (!isChess(playerColor))
+	{
+		return false; // No check, so no checkmate
+	}
+
+	// Iterate through all pieces of the given color
+	for (int row = 0; row < 8; row++)
+	{
+		for (int col = 0; col < 8; col++)
+		{
+			Piece* piece = _board[row][col];
+			if (piece && piece->getColor() == playerColor)
+			{
+				// Try all possible moves for this piece
+				for (int dRow = 0; dRow < 8; dRow++)
+				{
+					for (int dCol = 0; dCol < 8; dCol++)
+					{
+						// Skip the same square
+						if (dRow == row && dCol == col)
+						{
+							continue;
+						}
+
+						// Convert to move string
+						char srcCol = 'a' + col;
+						char srcRow = '8' - row;
+						char dstCol = 'a' + dCol;
+						char dstRow = '8' - dRow;
+						std::string move = { srcCol, srcRow, dstCol, dstRow };
+
+						// Try the move
+						try
+						{
+							MoveExeption e;
+							if (e.checkMove(GetBoard(), playerColor, move))
+							{
+								try
+								{
+									piece->Move(*this, move);
+								}
+								catch (MoveExeption e)
+								{
+									if (e.what()[0] == '0')
+									{
+										// Temporarily execute the move
+										Piece* tempSrc = _board[row][col];
+										Piece* tempDst = _board[dRow][dCol];
+										_board[dRow][dCol] = tempSrc;
+										_board[row][col] = nullptr;
+
+										// Check if the king is still in check
+										bool stillInCheck = isChess(playerColor);
+
+										// Undo the move
+										_board[row][col] = tempSrc;
+										_board[dRow][dCol] = tempDst;
+
+										// If the move gets the king out of check, no mate
+										if (!stillInCheck)
+										{
+											return false;
+										}
+									}
+								}
+
+							}
+						}
+						catch (MoveExeption&)
+						{
+							// Invalid move, ignore and continue
+						}
+					}
+				}
+			}
+		}
+	}
+
+	// If no valid moves are found, it's checkmate
+	return true;
 }

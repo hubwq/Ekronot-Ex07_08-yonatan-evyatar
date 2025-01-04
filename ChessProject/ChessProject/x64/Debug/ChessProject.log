@@ -1,2 +1,12 @@
-﻿  Pawn.cpp
-  ChessProject.vcxproj -> C:\Users\Cyber_User\OneDrive\Magshimim\c++\chess\Ekronot-Ex07_08-yonatan-evyatar\ChessProject\x64\Debug\ChessProject.exe
+﻿  Bishop.cpp
+  King.cpp
+  Knight.cpp
+  Manager.cpp
+  MoveExeption.cpp
+  Pawn.cpp
+  Piece.cpp
+  Queen.cpp
+  Rook.cpp
+  main.cpp
+  Generating Code...
+  ChessProject.vcxproj -> C:\Magshimim\C++\Ekronot-Ex07_08-yonatan-evyatar\ChessProject\x64\Debug\ChessProject.exe
