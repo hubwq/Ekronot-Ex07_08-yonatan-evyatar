@@ -143,6 +143,11 @@ void Manager::SetBoard(const std::string& board)
 	}
 }
 
+void Manager::changeBoardValue(const char piece, const int color, const int row, const int col)
+{
+	_board[row][col] = createPiece(piece, color);
+}
+
 
 void Manager::SwitchTurn()
 {
@@ -156,42 +161,52 @@ void Manager::MoveBoard(const std::string& move)
 	// validate the move using the current board state and turn
 	if (error.checkMove(this->GetBoard(), this->_turn, move))
 	{
+		int sRow = '8' - move[1];
+		int sCol = move[0] - 'a';
+		int dRow = '8' - move[3];
+		int dCol = move[2] - 'a';
 		try
 		{
 			// Execute the move 
-			this->_board['8' - move[1]][move[0] - 'a']->Move(*this, move);
+			this->_board[sRow][sCol]->Move(*this, move);
 		}
 		catch (MoveExeption e)
 		{
 			// If the move is legal
 			if (e.what()[0] == '0')
 			{
-				Piece* srcPiece = _board['8' - move[1]][move[0] - 'a'];
-				Piece* dstPiece = _board['8' - move[3]][move[2] - 'a'];
+				Piece* srcPiece = _board[sRow][sCol];
+				Piece* dstPiece = _board[dRow][dCol];
 				std::string dstName = (dstPiece) ? dstPiece->getName() : "#";
 				int dstColor = (dstPiece) ? dstPiece->getColor() : -1;
 				// check if there is a piece to kill 
-				if (_board['8' - move[3]][move[2] - 'a'] != nullptr)
+				if (_board[dRow][dCol] != nullptr)
 				{
 					// delete the piece at the target position
-					delete _board['8' - move[3]][move[2] - 'a'];
-					_board['8' - move[3]][move[2] - 'a'] = nullptr;
+					delete _board[dRow][dCol];
+					_board[dRow][dCol] = nullptr;
 				}
 
 				// move the piece to dest
-				_board['8' - move[3]][move[2] - 'a'] = createPiece(srcPiece->getName()[0], srcPiece->getColor());
+				_board[dRow][dCol] = createPiece(srcPiece->getName()[0], srcPiece->getColor());
+
+				// Reset 'lastDoubleMove' at the start of a new turn
+				if (!(srcPiece->getName() == "Pawn" && std::abs(sRow - dRow) == 2))
+				{
+					this->lastDoubleMove = -1;
+				}
 
 				// delete the piece from source
-				delete _board['8' - move[1]][move[0] - 'a'];
-				_board['8' - move[1]][move[0] - 'a'] = nullptr;
+				delete _board[sRow][sCol];
+				_board[sRow][sCol] = nullptr;
 
 				// Undo move if there is 'chess' on players king
 				if (isChess(_turn))
 				{
-					_board['8' - move[1]][move[0] - 'a'] = createPiece(_board['8' - move[3]][move[2] - 'a']->getName()[0], _board['8' - move[3]][move[2] - 'a']->getColor());
-					delete _board['8' - move[3]][move[2] - 'a'];
-					_board['8' - move[3]][move[2] - 'a'] = nullptr;
-					_board['8' - move[3]][move[2] - 'a'] = createPiece(dstName[0], dstColor);
+					_board[sRow][sCol] = createPiece(_board[dRow][dCol]->getName()[0], _board[dRow][dCol]->getColor());
+					delete _board[dRow][dCol];
+					_board[dRow][dCol] = nullptr;
+					_board[dRow][dCol] = createPiece(dstName[0], dstColor);
 					throw MoveExeption("4\0");
 				}
 				// check if there is 'chess' to opponent's king

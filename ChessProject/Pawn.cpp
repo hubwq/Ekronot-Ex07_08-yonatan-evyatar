@@ -46,9 +46,12 @@ void Pawn::Move(Manager& board, const std::string& move) const
 		// if the dest square is not enemy piece
 		if (boardstr[dRow * 8 + dCol] == '#')
 		{
-			if (boardstr[dRow * 8 + dCol] == boardstr[board.getLastDoubleMove()])
+			if ((board.getLastDoubleMove() >= 0 && board.getLastDoubleMove() < 64) && (dRow * 8 + dCol) == board.getLastDoubleMove())
 			{
-
+				Piece* piece = board.GetBoardVector()[sRow][dCol];
+				// Remove the captured pawn
+				delete piece;
+				board.changeBoardValue('#', -1, sRow, dCol);
 				throw MoveExeption("0\0");
 			}
 			throw MoveExeption("6\0");

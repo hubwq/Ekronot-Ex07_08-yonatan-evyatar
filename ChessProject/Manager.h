@@ -25,6 +25,7 @@ public:
 	int GetTurn() const;
 	
 	void SetBoard(const std::string& board);
+	void changeBoardValue(const char piece, const int color, const int row, const int col);
 
 	void SwitchTurn();
 	void MoveBoard(const std::string& move);
