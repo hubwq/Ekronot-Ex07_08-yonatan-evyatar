@@ -18,8 +18,8 @@ void Pawn::Move(Manager& board, const std::string& move) const
 	std::string boardstr = board.GetBoard();
 	MoveExeption error;
 
-	const int SINGLE_STEP = (board.GetTurn() == 0) ? -1 : 1;
-	const int DOUBLE_STEP = (board.GetTurn() == 0) ? -2 : 2;
+	const int SINGLE_STEP = (getColor() == 0) ? -1 : 1;
+	const int DOUBLE_STEP = (getColor() == 0) ? -2 : 2;
 	const int DIOGINAL = 1;
 	int sRow = '8' - move[1];
 	int sCol = move[0] - 'a';
@@ -53,10 +53,10 @@ void Pawn::Move(Manager& board, const std::string& move) const
 				delete piece;
 				board.changeBoardValue('#', -1, sRow, dCol);
 				throw MoveExeption("0\0");
+
 			}
 			throw MoveExeption("6\0");
 		}
-
 		throw MoveExeption("0\0");
 	}
 
@@ -65,6 +65,6 @@ void Pawn::Move(Manager& board, const std::string& move) const
 		throw MoveExeption("6\0");
 	}
 }
+
+
 #endif // PAWN_H
-
-

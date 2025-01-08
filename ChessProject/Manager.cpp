@@ -9,6 +9,9 @@
 #include "PieceExeption.h"
 #include "MoveExeption.h"
 
+#include <iostream>
+#define MIN_ROW 0
+#define MAX_ROW 7
 Piece* Manager::createPiece(const char piece, const int color)
 {
 	switch (tolower(piece))
@@ -154,6 +157,7 @@ void Manager::SwitchTurn()
 	this->_turn = this->_turn ? 0 : 1;
 }
 
+
 void Manager::MoveBoard(const std::string& move)
 {
 	MoveExeption error;
@@ -190,6 +194,18 @@ void Manager::MoveBoard(const std::string& move)
 				// move the piece to dest
 				_board[dRow][dCol] = createPiece(srcPiece->getName()[0], srcPiece->getColor());
 
+				if (_board[sRow][sCol]->getName() == "Pawn")
+				{
+					if (dRow == MIN_ROW || dRow == MAX_ROW)
+						{
+							delete _board[dRow][dCol];
+							_board[dRow][dCol] = nullptr;
+							promotion(dRow, sRow, dCol, sCol, GetTurn());
+						}
+				}
+
+				
+				
 				// Reset 'lastDoubleMove' at the start of a new turn
 				if (!(srcPiece->getName() == "Pawn" && std::abs(sRow - dRow) == 2))
 				{
@@ -239,6 +255,24 @@ int Manager::getLastDoubleMove()
 void Manager::setLastDoubleMove(int index)
 {
 	this->lastDoubleMove = index;
+}
+
+
+void Manager::promotion(int dRow, int sRow, int dCol, int sCol, int color) 
+{
+	char name = NULL;
+	do
+	{
+		std::cout << "Whice piece do yo want to chooose?" << std::endl;
+		std::cout << "R for rook" << std::endl;
+		std::cout << "K for knight" << std::endl;
+		std::cout << "B for bishop" << std::endl;
+		std::cout << "Q for queen" << std::endl;
+		std::cin >> name;
+	}
+	while (tolower(name) != 'r' && tolower(name) != 'k' && tolower(name) != 'b' && tolower(name) != 'q');
+	changeBoardValue(name, color, dRow, dCol);
+
 }
 
 /*
@@ -314,6 +348,7 @@ bool Manager::isChess(int playerColor)
 	}
 	return false;
 }
+
 
 /*
 * Check if there is CheckMate
