@@ -31,7 +31,6 @@ public:
 	void MoveBoard(const std::string& move);
 	int getLastDoubleMove();
 	void setLastDoubleMove(int index);
-	bool checkIfPromotion(int dRow, int dCol);
 
 	void promotion(int dRow, int sRow, int dCol, int sCol, int color);
 

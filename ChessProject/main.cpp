@@ -15,21 +15,20 @@ using std::string;
 #define MIN_BOARD_ROWS 0
 #define MIN_BOARD_COLS 0
 
-// FOR DEBUG - DONT SHOW PIECES TYPE ONLY PIECES COLOR
-void printBoard(const std::vector<std::vector<Piece*>>& board)
+// FOR DEBUG 
+void printBoard(const Manager& board)
 {
+    std::string boardstr = board.GetBoard();
+    int row = 8;
     cout << "Board state:" << endl;
     for (int row = 0; row < MAX_BOARD_ROWS; ++row)
     {
         for (int col = 0; col < MAX_BOARD_COLS; ++col)
         {
-            Piece* piece = board[row][col];
-            if (piece != nullptr)
-                cout << piece->getColor() << " "; // Assuming `getSymbol()` gives the piece symbol
-            else
-                cout << ". "; // Empty square
+            std::cout << boardstr[row * 8 + col];
+            std::cout << " ";
         }
-        cout << endl;
+        cout << "" << endl;
     }
 }
 
@@ -163,7 +162,7 @@ void play(Pipe& p, Manager& game)
         }
         catch (MoveExeption e)
         {
-            printBoard(board);
+            printBoard(game);
             // send move to graphics
             strcpy_s(msgToGraphics, "Move successful");
             msgToGraphics[0] = e.what()[0];
