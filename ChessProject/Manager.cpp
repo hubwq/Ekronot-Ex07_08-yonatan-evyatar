@@ -267,12 +267,12 @@ void Manager::promotion(int dRow, int sRow, int dCol, int sCol, int color)
 	{
 		std::cout << "Whice piece do yo want to chooose?" << std::endl;
 		std::cout << "R for rook" << std::endl;
-		std::cout << "K for knight" << std::endl;
+		std::cout << "N for knight" << std::endl;
 		std::cout << "B for bishop" << std::endl;
 		std::cout << "Q for queen" << std::endl;
 		std::cin >> name;
 	}
-	while (tolower(name) != 'r' && tolower(name) != 'k' && tolower(name) != 'b' && tolower(name) != 'q');
+	while (tolower(name) != 'r' && tolower(name) != 'n' && tolower(name) != 'b' && tolower(name) != 'q');
 	changeBoardValue(name, color, dRow, dCol);
 
 }
