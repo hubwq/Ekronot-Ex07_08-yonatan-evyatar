@@ -13,14 +13,10 @@ Bishop::~Bishop()
 {
 }
 
-void Bishop::Move(Manager& board, const std::string& move) const
+void Bishop::Move(Manager& board, const int sRow, const int sCol, const int dRow, const int dCol) const
 {
 	std::string boardstr = board.GetBoard();
 
-	int sRow = '8' - move[1];
-	int sCol = move[0] - 'a';
-	int dRow = '8' - move[3];
-	int dCol = move[2] - 'a';
 	// check if the dest is in dioginal from the source
 	if (abs(sCol - dCol) == abs(sRow - dRow))
 	{
@@ -30,9 +26,9 @@ void Bishop::Move(Manager& board, const std::string& move) const
 		int currentRow = sRow + rowStep;
 		int currentCol = sCol + colStep;
 
-		while (currentRow != dRow && currentCol != dCol) 
+		while (currentRow != dRow && currentCol != dCol)
 		{
-			if (boardstr[currentRow * 8 + currentCol] != '#') 
+			if (boardstr[currentRow * 8 + currentCol] != '#')
 			{
 				throw MoveExeption("6\0");
 			}

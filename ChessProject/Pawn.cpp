@@ -13,7 +13,7 @@ Pawn::~Pawn()
 }
 
 // pawn move
-void Pawn::Move(Manager& board, const std::string& move) const
+void Pawn::Move(Manager& board, const int sRow, const int sCol, const int dRow, const int dCol) const
 {
 	std::string boardstr = board.GetBoard();
 	MoveExeption error;
@@ -21,10 +21,6 @@ void Pawn::Move(Manager& board, const std::string& move) const
 	const int SINGLE_STEP = (getColor() == 0) ? -1 : 1;
 	const int DOUBLE_STEP = (getColor() == 0) ? -2 : 2;
 	const int DIOGINAL = 1;
-	int sRow = '8' - move[1];
-	int sCol = move[0] - 'a';
-	int dRow = '8' - move[3];
-	int dCol = move[2] - 'a';
 
 	// normal move
 	if (dRow == sRow + SINGLE_STEP && sCol == dCol && boardstr[dRow * 8 + dCol] == '#')

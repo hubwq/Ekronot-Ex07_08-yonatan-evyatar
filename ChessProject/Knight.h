@@ -7,5 +7,5 @@ class Knight : public Piece
 public:
 	Knight(const int color);
 	virtual ~Knight();
-	virtual void Move(Manager& board, const std::string& move) const override;
+	virtual void Move(Manager& board, const int sRow, const int sCol, const int dRow, const int dCol) const override;
 };

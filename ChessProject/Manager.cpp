@@ -172,7 +172,7 @@ void Manager::MoveBoard(const std::string& move)
 		try
 		{
 			// Execute the move 
-			this->_board[sRow][sCol]->Move(*this, move);
+			this->_board[sRow][sCol]->Move(*this, sRow, sCol, dRow, dCol);
 		}
 		catch (MoveExeption e)
 		{
@@ -197,11 +197,11 @@ void Manager::MoveBoard(const std::string& move)
 				if (_board[sRow][sCol]->getName() == "Pawn")
 				{
 					if (dRow == MIN_ROW || dRow == MAX_ROW)
-						{
-							delete _board[dRow][dCol];
-							_board[dRow][dCol] = nullptr;
-							promotion(dRow, sRow, dCol, sCol, GetTurn());
-						}
+					{
+						delete _board[dRow][dCol];
+						_board[dRow][dCol] = nullptr;
+						promotion(dRow, sRow, dCol, sCol, GetTurn());
+					}
 				}
 
 				
@@ -234,6 +234,8 @@ void Manager::MoveBoard(const std::string& move)
 					}
 					throw MoveExeption("1\0");
 				}
+
+				_board[dRow][dCol]->setMoved(true);
 			}
 
 			throw e;
@@ -333,7 +335,68 @@ bool Manager::isChess(int playerColor)
 				{
 					MoveExeption e;
 					if(e.checkMove(this->GetBoard(), (playerColor) ? 0 : 1, move))
-						_board[row][col]->Move(*this, move);
+						_board[row][col]->Move(*this, row, col, kingRow, kingCol);
+					throw e;
+				}
+				catch (MoveExeption e)
+				{
+					if (e.what()[0] == '0')
+					{
+						return true;
+					}
+				}
+			}
+		}
+	}
+	return false;
+}
+
+bool Manager::isChess(int playerColor, std::vector<std::vector<Piece*>> board)
+{
+	int kingRow = -1, kingCol = -1;
+
+	// find king position
+	for (int row = 0; row < 8; row++)
+	{
+		for (int col = 0; col < 8; col++)
+		{
+			Piece* piece = board[row][col];
+			if (piece && piece->getName() == "King" && piece->getColor() == playerColor)
+			{
+				kingRow = row;
+				kingCol = col;
+
+				break;
+			}
+		}
+		if (kingRow != -1)
+		{
+			break;
+		}
+	}
+
+	// if no king, there is no chess
+	if (kingRow == -1 || kingCol == -1)
+	{
+		return false;
+	}
+
+	// check every opponent's piece on the board
+	for (int row = 0; row < 8; row++)
+	{
+		for (int col = 0; col < 8; col++)
+		{
+			Piece* piece = board[row][col];
+			if (piece && piece->getColor() != playerColor)
+			{
+				std::string move = MoveToStr(row, col, kingRow, kingCol);
+
+				// check if the piece do chess to the king
+				try
+				{
+					MoveExeption e;
+					if (e.checkMove(this->GetBoard(), (playerColor) ? 0 : 1, move))
+						board[row][col]->Move(*this, row, col, kingRow, kingCol);
 					throw e;
 				}
 				catch (MoveExeption e)
@@ -383,52 +446,41 @@ bool Manager::isMate(int playerColor)
 						}
 
 						// Convert to move string
-						char srcCol = 'a' + col;
-						char srcRow = '8' - row;
-						char dstCol = 'a' + dCol;
-						char dstRow = '8' - dRow;
-						std::string move = { srcCol, srcRow, dstCol, dstRow };
+						std::string move = MoveToStr(row, col, dRow, dCol);
 
 						// Try the move
-						try
+						MoveExeption e;
+						if (e.checkMove(GetBoard(), playerColor, move))
 						{
-							MoveExeption e;
-							if (e.checkMove(GetBoard(), playerColor, move))
+							try
 							{
-								try
+								piece->Move(*this, row, col, dRow, dCol);
+							}
+							catch (MoveExeption e)
+							{
+								if (e.what()[0] == '0')
 								{
-									piece->Move(*this, move);
-								}
-								catch (MoveExeption e)
-								{
-									if (e.what()[0] == '0')
+									// Temporarily execute the move
+									Piece* tempSrc = _board[row][col];
+									Piece* tempDst = _board[dRow][dCol];
+									_board[dRow][dCol] = tempSrc;
+									_board[row][col] = nullptr;
+
+									// Check if the king is still in check
+									bool stillInCheck = isChess(playerColor);
+
+									// Undo the move
+									_board[row][col] = tempSrc;
+									_board[dRow][dCol] = tempDst;
+
+									// If the move gets the king out of check, no mate
+									if (!stillInCheck)
 									{
-										// Temporarily execute the move
-										Piece* tempSrc = _board[row][col];
-										Piece* tempDst = _board[dRow][dCol];
-										_board[dRow][dCol] = tempSrc;
-										_board[row][col] = nullptr;
-
-										// Check if the king is still in check
-										bool stillInCheck = isChess(playerColor);
-
-										// Undo the move
-										_board[row][col] = tempSrc;
-										_board[dRow][dCol] = tempDst;
-
-										// If the move gets the king out of check, no mate
-										if (!stillInCheck)
-										{
-											return false;
-										}
+										return false;
 									}
 								}
-
 							}
-						}
-						catch (MoveExeption&)
-						{
-							// Invalid move, ignore and continue
+
 						}
 					}
 				}
@@ -438,4 +490,16 @@ bool Manager::isMate(int playerColor)
 
 	// If no valid moves are found, it's checkmate
 	return true;
+}
+
+std::string Manager::MoveToStr(const int sRow, const int sCol, const int dRow, const int dCol)
+{
+	std::string move = "move";
+
+	move[0] = 'a' + sCol;
+	move[1] = '8' - sRow;
+	move[2] = 'a' + dCol;
+	move[3] = '8' - dRow;
+
+	return move;
 }

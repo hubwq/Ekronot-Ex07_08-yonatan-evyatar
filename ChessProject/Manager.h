@@ -35,7 +35,9 @@ public:
 	void promotion(int dRow, int sRow, int dCol, int sCol, int color);
 
 	bool isChess(int playerColor);
+	bool isChess(int playerColor, std::vector<std::vector<Piece*>> board);
 	bool isMate(int playerColor);
 
+	static std::string MoveToStr(const int sRow, const int sCol, const int dRow, const int dCol);
 };
 

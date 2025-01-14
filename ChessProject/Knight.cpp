@@ -4,7 +4,7 @@
 #include "Knight.h"
 
 
-Knight::Knight(const int color): Piece("nKnight", color)
+Knight::Knight(const int color) : Piece("nKnight", color)
 {
 }
 
@@ -12,14 +12,9 @@ Knight::~Knight()
 {
 }
 
-void Knight::Move(Manager& board, const std::string& move) const
+void Knight::Move(Manager& board, const int sRow, const int sCol, const int dRow, const int dCol) const
 {
 	std::string boardstr = board.GetBoard();
-	
-	int sRow = '8' - move[1];
-	int sCol = move[0] - 'a';
-	int dRow = '8' - move[3];
-	int dCol = move[2] - 'a';
 
 	int rowOffset = abs(dRow - sRow);
 	int colOffset = abs(dCol - sCol);

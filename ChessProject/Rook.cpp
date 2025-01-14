@@ -2,7 +2,11 @@
 #define ROOK_H
 #include "Rook.h"
 
-Rook::Rook(const int color) : Piece("Rook", color)
+Rook::Rook(const int color) : Piece("Rook", color, false)
+{
+}
+
+Rook::Rook(const int color, const bool moved) : Piece("Rook", color, moved)
 {
 }
 
@@ -11,20 +15,15 @@ Rook::~Rook()
 }
 
 
-void Rook::Move(Manager& board, const std::string& move) const
+void Rook::Move(Manager& board, const int sRow, const int sCol, const int dRow, const int dCol) const
 {
     std::string boardstr = board.GetBoard();
-    
-    int sRow = '8' - move[1];
-    int sCol = move[0] - 'a';
-    int dRow = '8' - move[3];
-    int dCol = move[2] - 'a';
 
     // check if the move is in a straight line
     if (sRow == dRow || sCol == dCol)
     {
-        int rowStep = (dRow > sRow) ? 1 : (dRow < sRow ? -1 : 0); 
-        int colStep = (dCol > sCol) ? 1 : (dCol < sCol ? -1 : 0); 
+        int rowStep = (dRow > sRow) ? 1 : (dRow < sRow ? -1 : 0);
+        int colStep = (dCol > sCol) ? 1 : (dCol < sCol ? -1 : 0);
 
         int currentRow = sRow + rowStep;
         int currentCol = sCol + colStep;
@@ -34,7 +33,7 @@ void Rook::Move(Manager& board, const std::string& move) const
         {
             if (boardstr[currentRow * 8 + currentCol] != '#')
             {
-                throw MoveExeption("6\0"); 
+                throw MoveExeption("6\0");
             }
             currentRow += rowStep;
             currentCol += colStep;

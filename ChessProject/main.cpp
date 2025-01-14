@@ -16,19 +16,16 @@ using std::string;
 #define MIN_BOARD_COLS 0
 
 // FOR DEBUG 
-void printBoard(const Manager& board)
+void printBoard(const string& board)
 {
-    std::string boardstr = board.GetBoard();
-    int row = 8;
     cout << "Board state:" << endl;
     for (int row = 0; row < MAX_BOARD_ROWS; ++row)
     {
         for (int col = 0; col < MAX_BOARD_COLS; ++col)
         {
-            std::cout << boardstr[row * 8 + col];
-            std::cout << " ";
+            cout << board[row * 8 + col] << " ";
         }
-        cout << "" << endl;
+        cout << endl;
     }
 }
 
@@ -162,7 +159,7 @@ void play(Pipe& p, Manager& game)
         }
         catch (MoveExeption e)
         {
-            printBoard(game);
+            printBoard(game.GetBoard());
             // send move to graphics
             strcpy_s(msgToGraphics, "Move successful");
             msgToGraphics[0] = e.what()[0];
